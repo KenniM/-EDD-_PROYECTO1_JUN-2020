@@ -13,10 +13,10 @@ public:
 
 int maximo(int a, int b);
 
-int altura(nodoAVL *N) {
-  if (N == nullptr)
+int altura(nodoAVL *nodo) {
+  if (nodo == nullptr)
     return 0;
-  return N->altura;
+  return nodo->altura;
 }
 
 int maximo(int a, int b) {
