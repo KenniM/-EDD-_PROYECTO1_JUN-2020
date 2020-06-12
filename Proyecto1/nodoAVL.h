@@ -5,7 +5,7 @@ using namespace std;
 
 class nodoAVL {
 public:
-  int ID;
+  string ID;
   nodoAVL *izquierda;
   nodoAVL *derecha;
   int altura;
@@ -27,7 +27,7 @@ int maximo(int a, int b) {
     }
 }
 
-nodoAVL *nuevoNodo(int ID) {
+nodoAVL *nuevoNodo(string ID) {
   nodoAVL *nodo = new nodoAVL();
   nodo->ID = ID;
   nodo->izquierda = nullptr;
@@ -66,7 +66,7 @@ int obtenerFE(nodoAVL *aux) {
   }
 }
 
-nodoAVL *insertarNodo(nodoAVL *nodo, int ID) {
+nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
   if (nodo == nullptr)
   {
       return (nuevoNodo(ID));
@@ -114,7 +114,7 @@ nodoAVL *valorMinimo(nodoAVL *nodo) {
   return aux;
 }
 
-nodoAVL *eliminarnodoAVL(nodoAVL *raiz, int ID) {
+nodoAVL *eliminarnodoAVL(nodoAVL *raiz, string ID) {
   if (raiz == nullptr)
   {
       return raiz;
@@ -171,6 +171,19 @@ nodoAVL *eliminarnodoAVL(nodoAVL *raiz, int ID) {
     }
   }
   return raiz;
+}
+
+void imprimirArbol(nodoAVL* nodo,int contador){
+    if(nodo==NULL){
+        return;
+    }else{
+        imprimirArbol(nodo->derecha,contador+1);
+        for(int i=0;i<contador;i++){
+            cout<<"   ";
+        }
+        cout<<nodo->ID<<endl;
+        imprimirArbol(nodo->izquierda,contador+1);
+    }
 }
 
 

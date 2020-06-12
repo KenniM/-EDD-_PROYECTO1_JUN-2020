@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "matriz.h"
+#include "nodoAVL.h"
 #include "windows.h"
 #define _CRT_SECURE_NO_DEPRECATE
 
@@ -127,12 +128,23 @@ int main()
     cubo->insertarElemento("Susel", 3, "hp", "Jalapa","susel3");
     cubo->insertarElemento("Roxana", 4, "Walmart", "Jalapa","roxana4");
     cubo->insertarElemento("Andrea", 5, "Walmart", "Jalapa","andrea5");
-    cubo->insertarElemento("Andrea", 9, "Walmart", "Jalapa","Andre9");
     cubo->insertarElemento("Sebas", 6, "Walmart", "Jalapa","sebas6");
     cubo->insertarElemento("Andres", 7, "hp", "Guatemala","andres7");
     cubo->insertarElemento("Willy", 8, "MAX", "Jalapa","willy7");
 
     cubo->recorrerXY();
+
+    nodoAVL *arbol=nullptr;
+    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));
+
+    imprimirArbol(arbol,0);
+    cout<<endl;
 
     menuPrincipal(cubo);
 
