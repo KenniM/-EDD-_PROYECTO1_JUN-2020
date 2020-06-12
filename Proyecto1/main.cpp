@@ -122,7 +122,7 @@ int main()
 {srand(time(NULL));
     Matriz *cubo=new Matriz();
 
-    cubo->insertarElemento("Mynor", 1, "MAX", "guATemala","mynor1");
+    cubo->insertarElemento("Mynor", 1, "MAX", "Guatemala","mynor1");
     cubo->insertarElemento("Susan", 2, "hp", "Jutiapa","susan2");
     cubo->insertarElemento("Susel", 3, "hp", "Jalapa","susel3");
     cubo->insertarElemento("Roxana", 4, "Walmart", "Jalapa","roxana4");

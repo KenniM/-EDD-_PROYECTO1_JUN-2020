@@ -1,0 +1,178 @@
+#ifndef NODOAVL_H
+#define NODOAVL_H
+#include <iostream>
+using namespace std;
+
+class nodoAVL {
+public:
+  int ID;
+  nodoAVL *izquierda;
+  nodoAVL *derecha;
+  int altura;
+};
+
+int maximo(int a, int b);
+
+int altura(nodoAVL *N) {
+  if (N == nullptr)
+    return 0;
+  return N->altura;
+}
+
+int maximo(int a, int b) {
+    if(a>b){
+        return a;
+    }else{
+        return b;
+    }
+}
+
+nodoAVL *nuevoNodo(int ID) {
+  nodoAVL *nodo = new nodoAVL();
+  nodo->ID = ID;
+  nodo->izquierda = nullptr;
+  nodo->derecha = nullptr;
+  nodo->altura = 1;
+  return (nodo);
+}
+
+nodoAVL *rotarDerecha(nodoAVL *y) {
+  nodoAVL *x = y->izquierda;
+  nodoAVL *T2 = x->derecha;
+  x->derecha = y;
+  y->izquierda = T2;
+  y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
+  x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
+  return x;
+}
+
+nodoAVL *rotarIzquierda(nodoAVL *x) {
+  nodoAVL *y = x->derecha;
+  nodoAVL *T2 = y->izquierda;
+  y->izquierda = x;
+  x->derecha = T2;
+  x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
+  y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
+  return y;
+}
+
+int obtenerFE(nodoAVL *aux) {
+  if (aux == nullptr)
+  {
+      return 0;
+  }else
+  {
+   return altura(aux->izquierda) - altura(aux->derecha);
+  }
+}
+
+nodoAVL *insertarNodo(nodoAVL *nodo, int ID) {
+  if (nodo == nullptr)
+  {
+      return (nuevoNodo(ID));
+  }
+  if (ID < nodo->ID)
+  {
+      nodo->izquierda = insertarNodo(nodo->izquierda, ID);
+  }
+  else if (ID > nodo->ID)
+  {
+      nodo->derecha = insertarNodo(nodo->derecha, ID);
+  }
+  else
+  {
+      return nodo;
+  }
+
+  nodo->altura = 1 + maximo(altura(nodo->izquierda), altura(nodo->derecha));
+  int FE = obtenerFE(nodo);
+  if (FE > 1) {
+    if (ID < nodo->izquierda->ID) {
+      return rotarDerecha(nodo);
+    } else if (ID > nodo->izquierda->ID) {
+      nodo->izquierda = rotarIzquierda(nodo->izquierda);
+      return rotarDerecha(nodo);
+    }
+  }
+  if (FE < -1) {
+    if (ID > nodo->derecha->ID) {
+      return rotarIzquierda(nodo);
+    } else if (ID < nodo->derecha->ID) {
+      nodo->izquierda = rotarDerecha(nodo->izquierda);
+      return rotarIzquierda(nodo);
+    }
+  }
+  return nodo;
+}
+
+nodoAVL *valorMinimo(nodoAVL *nodo) {
+  nodoAVL *aux = nodo;
+  while (aux->izquierda != nullptr)
+  {
+      aux = aux->izquierda;
+  }
+  return aux;
+}
+
+nodoAVL *eliminarnodoAVL(nodoAVL *raiz, int ID) {
+  if (raiz == nullptr)
+  {
+      return raiz;
+  }
+  if (ID < raiz->ID)
+  {
+      raiz->izquierda = eliminarnodoAVL(raiz->izquierda, ID);
+  }
+  else if (ID > raiz->ID)
+  {
+      raiz->derecha = eliminarnodoAVL(raiz->derecha, ID);
+  }
+  else {
+    if ((raiz->izquierda == nullptr) || (raiz->derecha == nullptr)) {
+      nodoAVL *temp;
+      if(raiz->izquierda){
+          temp=raiz->izquierda;
+      }else{
+          temp=raiz->derecha;
+      }
+      if (temp == nullptr) {
+        temp = raiz;
+        raiz = nullptr;
+      } else
+        *raiz = *temp;
+      delete temp;
+    } else {
+      nodoAVL *temp = valorMinimo(raiz->derecha);
+      raiz->ID = temp->ID;
+      raiz->derecha = eliminarnodoAVL(raiz->derecha,temp->ID);
+    }
+  }
+
+  if (raiz == nullptr)
+  {
+      return raiz;
+  }
+  raiz->altura = 1 + maximo(altura(raiz->izquierda),altura(raiz->derecha));
+  int FE = obtenerFE(raiz);
+  if (FE > 1) {
+    if (obtenerFE(raiz->izquierda) >= 0) {
+      return rotarDerecha(raiz);
+    } else {
+      raiz->izquierda = rotarIzquierda(raiz->izquierda);
+      return rotarDerecha(raiz);
+    }
+  }
+  if (FE < -1) {
+    if (obtenerFE(raiz->derecha) <= 0) {
+      return rotarIzquierda(raiz);
+    } else {
+      raiz->derecha = rotarDerecha(raiz->derecha);
+      return rotarIzquierda(raiz);
+    }
+  }
+  return raiz;
+}
+
+
+
+#endif // NODOAVL_H

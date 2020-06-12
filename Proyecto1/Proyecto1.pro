@@ -26,4 +26,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     matriz.h \
-    nodo.h
+    nodo.h \
+    nodoAVL.h
