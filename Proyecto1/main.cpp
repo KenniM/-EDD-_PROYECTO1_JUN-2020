@@ -151,6 +151,8 @@ int main()
     dot+="}";
     cout<<dot;
 
+    graficarAVL();
+
     //menuPrincipal(cubo);
 
 

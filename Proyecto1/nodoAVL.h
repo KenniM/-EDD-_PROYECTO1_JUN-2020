@@ -76,11 +76,11 @@ nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
   {
       return (nuevoNodo(ID));
   }
-  if (ID < nodo->ID)
+  if (ID > nodo->ID)
   {
       nodo->izquierda = insertarNodo(nodo->izquierda, ID);
   }
-  else if (ID > nodo->ID)
+  else if (ID < nodo->ID)
   {
       nodo->derecha = insertarNodo(nodo->derecha, ID);
   }
@@ -92,17 +92,17 @@ nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
   nodo->altura = 1 + maximo(altura(nodo->izquierda), altura(nodo->derecha));
   int FE = obtenerFE(nodo);
   if (FE > 1) {
-    if (ID < nodo->izquierda->ID) {
+    if (ID > nodo->izquierda->ID) {
       return rotarDerecha(nodo);
-    } else if (ID > nodo->izquierda->ID) {
+    } else if (ID < nodo->izquierda->ID) {
       nodo->izquierda = rotarIzquierda(nodo->izquierda);
       return rotarDerecha(nodo);
     }
   }
   if (FE < -1) {
-    if (ID > nodo->derecha->ID) {
+    if (ID < nodo->derecha->ID) {
       return rotarIzquierda(nodo);
-    } else if (ID < nodo->derecha->ID) {
+    } else if (ID > nodo->derecha->ID) {
       nodo->izquierda = rotarDerecha(nodo->izquierda);
       return rotarIzquierda(nodo);
     }
@@ -124,11 +124,11 @@ nodoAVL *eliminarnodoAVL(nodoAVL *raiz, string ID) {
   {
       return raiz;
   }
-  if (ID < raiz->ID)
+  if (ID > raiz->ID)
   {
       raiz->izquierda = eliminarnodoAVL(raiz->izquierda, ID);
   }
-  else if (ID > raiz->ID)
+  else if (ID < raiz->ID)
   {
       raiz->derecha = eliminarnodoAVL(raiz->derecha, ID);
   }
@@ -215,6 +215,16 @@ void armarAVL(nodoAVL* nodo,nodoAVL* padre){
     }
 }
 
+
+void graficarAVL(){
+    FILE * file;
+    file=fopen("avl.dot","w+");
+    fprintf(file,dot.c_str());
+    fclose(file);
+
+    system("dot.exe -Tpng avl.dot -o avl.png");
+    system("start avl.png");
+}
 
 
 
