@@ -2,10 +2,13 @@
 #define NODOAVL_H
 #include <iostream>
 using namespace std;
+string dot="digraph AVL{\n";
+int contadorNodo=0;
 
 class nodoAVL {
 public:
   string ID;
+  string auxGrafico;
   nodoAVL *izquierda;
   nodoAVL *derecha;
   int altura;
@@ -30,6 +33,8 @@ int maximo(int a, int b) {
 nodoAVL *nuevoNodo(string ID) {
   nodoAVL *nodo = new nodoAVL();
   nodo->ID = ID;
+  nodo->auxGrafico="Nodo"+to_string(contadorNodo);
+  contadorNodo++;
   nodo->izquierda = nullptr;
   nodo->derecha = nullptr;
   nodo->altura = 1;
@@ -71,11 +76,11 @@ nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
   {
       return (nuevoNodo(ID));
   }
-  if (ID < nodo->ID)
+  if (ID > nodo->ID)
   {
       nodo->izquierda = insertarNodo(nodo->izquierda, ID);
   }
-  else if (ID > nodo->ID)
+  else if (ID <= nodo->ID)
   {
       nodo->derecha = insertarNodo(nodo->derecha, ID);
   }
@@ -185,6 +190,31 @@ void imprimirArbol(nodoAVL* nodo,int contador){
         imprimirArbol(nodo->izquierda,contador+1);
     }
 }
+
+void crearNodosGrafico(nodoAVL *nodo){
+    if(nodo==NULL){
+        return;
+    }else{
+    crearNodosGrafico(nodo->derecha);
+    dot+=nodo->auxGrafico+" [label=\""+nodo->ID+"\"]\n";
+    crearNodosGrafico(nodo->izquierda);
+    }
+
+}
+
+void armarAVL(nodoAVL* nodo,nodoAVL* padre){
+    if(nodo==NULL){
+        return;
+    }else{
+        armarAVL(nodo->derecha,nodo);
+        if(nodo!=padre)
+        {
+            dot+=padre->auxGrafico+" -> "+nodo->auxGrafico+"\n";
+        }
+        armarAVL(nodo->izquierda,nodo);
+    }
+}
+
 
 
 
