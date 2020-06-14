@@ -146,7 +146,12 @@ int main()
     imprimirArbol(arbol,0);
     cout<<endl;
 
-    menuPrincipal(cubo);
+    crearNodosGrafico(arbol);
+    armarAVL(arbol,arbol);
+    dot+="}";
+    cout<<dot;
+
+    //menuPrincipal(cubo);
 
 
 
