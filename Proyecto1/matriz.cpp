@@ -7,6 +7,7 @@
 #include <algorithm>
 
 int compararSinMayus(std::string entrada1, std::string entrada2) {
+   //convert s1 and s2 into lower case strings
    transform(entrada1.begin(), entrada1.end(), entrada1.begin(), ::tolower);
    transform(entrada2.begin(), entrada2.end(), entrada2.begin(), ::tolower);
    if(entrada1.compare(entrada2) == 0)
@@ -63,7 +64,7 @@ Nodo* Matriz::buscarEmpresa(std::string empresa, Nodo* inicio) {
 }
 
 //Inserta un nodo dentro de la matriz cúbica dispersa
-void Matriz::insertarElemento(std::string usuario, std::string empresa, std::string departamento,std::string password) {
+void Matriz::insertarElemento(std::string usuario, int numero, std::string empresa, std::string departamento,std::string password) {
 
     Nodo* NodoUsr;
     Nodo* NodoDepto;
@@ -160,6 +161,7 @@ void Matriz::insertarElemento(std::string usuario, std::string empresa, std::str
 
                         aux->anterior->siguiente=NodoUsr;
                         aux->anterior=NodoUsr;
+
                         break;
                     }
                     auxDepto=auxDepto->anterior;
@@ -186,7 +188,6 @@ bool Matriz::verificarEmpresa(std::string empresa, Nodo* inicio, Nodo* usr) {
             if(inicio->atras->nombre==usr->nombre)
             {
                 std::cout<<"Ya existe un usuario con el mismo nombre:"<<usr->nombre<< " dentro de la sucursal de esta empresa."<<std::endl;
-                system("pause");
                 break;
             }else{
                 inicio=inicio->atras;
@@ -248,34 +249,6 @@ void Matriz::listarEmpleados(std::string depto, std::string empresa) {
     }
 }
 
-bool Matriz::localizarEmpleado(std::string usuario,std::string empresa,std::string departamento){
-    Nodo *aux1=cabecera; //ESTE AUXILIAR NAVEGA POR DEPARTAMENTOS
-    Nodo *aux2=aux1;     //ESTE AUXILIAR NAVEGA POR LOS USUARIOS DE ARRIBA HACIA ABAJO, LUEGO AVANZA AL DEPTO. SIGUIENTE
-    Nodo *aux3=aux1;     //ESTE AUXILIAR NAVEGA POR LAS EMPRESAS
-    std::string empTemp,empDepto;
-
-        while (aux1->siguiente!=nullptr) {
-            aux1=aux1->siguiente;
-            aux2=aux1;
-            while (aux2->abajo!=nullptr) {
-                aux2=aux2->abajo;
-                if(aux3->abajo!=nullptr){
-                    aux3=aux3->abajo;
-                }
-                if(aux2->nombre==usuario && aux3->nombre==empresa && aux1->nombre==departamento){
-                    return true;
-                }
-                while (aux2->atras!=nullptr) {
-                    aux2=aux2->atras;
-                    if(aux2->nombre==usuario && aux3->nombre==empresa && aux1->nombre==departamento){
-                        return true;
-                    }
-                }
-            }aux3=cabecera->abajo;
-        }
-        return false;
-}
-
 bool Matriz::buscarEmpleado(std::string usuario, std::string password,std::string empresa,std::string departamento){
     Nodo *aux1=cabecera; //ESTE AUXILIAR NAVEGA POR DEPARTAMENTOS
     Nodo *aux2=aux1;     //ESTE AUXILIAR NAVEGA POR LOS USUARIOS DE ARRIBA HACIA ABAJO, LUEGO AVANZA AL DEPTO. SIGUIENTE
@@ -319,10 +292,6 @@ void Matriz::recorrerXY() {
         y=y->abajo;
         std::cout<<y->nombre<<std::endl;
     }
-}
-
-void Matriz::graficarMatriz(){
-
 }
 
 
