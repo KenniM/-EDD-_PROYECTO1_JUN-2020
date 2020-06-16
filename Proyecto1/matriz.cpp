@@ -5,6 +5,8 @@
 #include "matriz.h"
 #include <algorithm>
 
+int contadorNodo=0;
+
 int compararSinMayus(std::string entrada1, std::string entrada2) {
    //convert s1 and s2 into lower case strings
    transform(entrada1.begin(), entrada1.end(), entrada1.begin(), ::tolower);
@@ -255,6 +257,38 @@ bool Matriz::buscarEmpleado(Matriz *matriz,std::string usuario, std::string pass
 
 }
 
+Nodo* Matriz::localizarEmpleado(Matriz *matriz,std::string usuario, std::string password,std::string empresa,std::string departamento){
+    if(matriz->buscarEmpresa(empresa,matriz->cabecera)!= nullptr){
+        if(matriz->buscarDepto(departamento,matriz->cabecera)!= nullptr){
+            Nodo *tempEmpresa=buscarEmpresa(empresa,cabecera);
+            Nodo *tempDepto=buscarDepto(departamento,cabecera);
+            while (tempEmpresa!=tempDepto){
+                if(tempEmpresa->siguiente!=nullptr){
+                    tempEmpresa=tempEmpresa->siguiente;
+                }
+                if(tempEmpresa==tempDepto){
+                    break;
+                }
+                if(tempDepto->abajo!= nullptr){
+                tempDepto=tempDepto->abajo;
+                }
+            }do{
+              //  std::cout<<tempEmpresa->nombre<<", contrasenia: "<<tempEmpresa->password<<"->";
+                if(tempEmpresa->nombre==usuario && tempEmpresa->password==password){
+                    return tempEmpresa;
+                }
+                tempEmpresa=tempEmpresa->atras;
+            }while (tempEmpresa!= nullptr);
+        }else{
+            return nullptr;
+        }
+    }else{
+        return false;
+    }
+    return false;
+
+}
+
 void Matriz::recorrerXY() {
     std::cout << "Imprimiendo..."<<std::endl;
     Nodo* x = cabecera;
@@ -271,4 +305,210 @@ void Matriz::recorrerXY() {
     }
 }
 
+nodoAVL* Matriz::rotarDerecha(nodoAVL* y){
+    if(y)
+    {
+        nodoAVL *x = y->izquierda;
+        nodoAVL *T2 = x->derecha;
+        x->derecha = y;
+        y->izquierda = T2;
+        y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
+        x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
+        return x;
+    }
+    return nullptr;
+}
 
+nodoAVL* Matriz::rotarIzquierda(nodoAVL *x){
+    nodoAVL *y = x->derecha;
+    nodoAVL *T2 = y->izquierda;
+    y->izquierda = x;
+    x->derecha = T2;
+    x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
+    y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
+    return y;
+}
+
+nodoAVL* Matriz::insertarNodo(nodoAVL *nodo, string ID){
+    if (nodo == nullptr)
+    {
+        nodo=new nodoAVL(ID,contadorNodo);
+        contadorNodo++;
+        return nodo;
+    }
+    if (ID > nodo->ID)
+    {
+        nodo->izquierda = insertarNodo(nodo->izquierda, ID);
+        contadorNodo++;
+    }
+    else if (ID < nodo->ID)
+    {
+        nodo->derecha = insertarNodo(nodo->derecha, ID);
+        contadorNodo++;
+    }
+    else
+    {
+        return nodo;
+    }
+
+    nodo->altura = 1 + maximo(altura(nodo->izquierda), altura(nodo->derecha));
+    int FE = obtenerFE(nodo);
+    if (FE > 1) {
+      if (ID > nodo->izquierda->ID) {
+        return rotarDerecha(nodo);
+      } else if (ID < nodo->izquierda->ID) {
+        nodo->izquierda = rotarIzquierda(nodo->izquierda);
+        return rotarDerecha(nodo);
+      }
+    }
+    if (FE < -1) {
+      if (ID < nodo->derecha->ID) {
+        return rotarIzquierda(nodo);
+      } else if (ID > nodo->derecha->ID) {
+        nodo->izquierda = rotarDerecha(nodo->izquierda);
+        return rotarIzquierda(nodo);
+      }
+    }
+    return nodo;
+}
+
+nodoAVL* Matriz::valorMinimo(nodoAVL *nodo){
+    nodoAVL *aux = nodo;
+    while (aux->izquierda != nullptr)
+    {
+        aux = aux->izquierda;
+    }
+    return aux;
+}
+
+nodoAVL* Matriz::eliminarnodoAVL(nodoAVL *raiz, string ID){
+    if (raiz == nullptr)
+    {
+        return raiz;
+    }
+    if (ID > raiz->ID)
+    {
+        raiz->izquierda = eliminarnodoAVL(raiz->izquierda, ID);
+    }
+    else if (ID < raiz->ID)
+    {
+        raiz->derecha = eliminarnodoAVL(raiz->derecha, ID);
+    }
+    else {
+      if ((raiz->izquierda == nullptr) || (raiz->derecha == nullptr)) {
+        nodoAVL *temp;
+        if(raiz->izquierda){
+            temp=raiz->izquierda;
+        }else{
+            temp=raiz->derecha;
+        }
+        if (temp == nullptr) {
+          temp = raiz;
+          raiz = nullptr;
+        } else
+          *raiz = *temp;
+        delete temp;
+      } else {
+        nodoAVL *temp = valorMinimo(raiz->derecha);
+        raiz->ID = temp->ID;
+        raiz->derecha = eliminarnodoAVL(raiz->derecha,temp->ID);
+      }
+    }
+
+    if (raiz == nullptr)
+    {
+        return raiz;
+    }
+    raiz->altura = 1 + maximo(altura(raiz->izquierda),altura(raiz->derecha));
+    int FE = obtenerFE(raiz);
+    if (FE > 1) {
+      if (obtenerFE(raiz->izquierda) >= 0) {
+        return rotarDerecha(raiz);
+      } else {
+        raiz->izquierda = rotarIzquierda(raiz->izquierda);
+        return rotarDerecha(raiz);
+      }
+    }
+    if (FE < -1) {
+      if (obtenerFE(raiz->derecha) <= 0) {
+        return rotarIzquierda(raiz);
+      } else {
+        raiz->derecha = rotarDerecha(raiz->derecha);
+        return rotarIzquierda(raiz);
+      }
+    }
+    return raiz;
+}
+
+void Matriz::imprimirArbol(nodoAVL *nodo, int contador){
+    if(nodo==NULL){
+        return;
+    }else{
+        imprimirArbol(nodo->derecha,contador+1);
+        for(int i=0;i<contador;i++){
+            cout<<"   ";
+        }
+        cout<<nodo->ID<<endl;
+        imprimirArbol(nodo->izquierda,contador+1);
+    }
+}
+
+void Matriz::crearNodosGrafico(nodoAVL *nodo,string dot){
+    if(nodo==NULL){
+        return;
+    }else{
+    crearNodosGrafico(nodo->derecha,dot);
+    dot+=nodo->auxGrafico+" [label=\""+nodo->ID+"\"]\n";
+    crearNodosGrafico(nodo->izquierda,dot);
+    }
+}
+
+void Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre,string dot){
+    if(nodo==NULL){
+        return;
+    }else{
+        armarAVL(nodo->derecha,nodo,dot);
+        if(nodo!=padre)
+        {
+            dot+=padre->auxGrafico+" -> "+nodo->auxGrafico+"\n";
+        }
+        armarAVL(nodo->izquierda,nodo,dot);
+    }
+}
+
+void Matriz::graficarAVL(nodoAVL* arbol){
+    string dot="digraph AVL{\n";
+    crearNodosGrafico(arbol,dot);
+    armarAVL(arbol,arbol,dot);
+    FILE * file;
+    file=fopen("avl.dot","w+");
+    fprintf(file,dot.c_str());
+    fclose(file);
+
+    system("dot.exe -Tpng avl.dot -o avl.png");
+    system("start avl.png");
+}
+
+int Matriz::altura(nodoAVL *nodo){
+    if (nodo == nullptr)
+      return 0;
+    return nodo->altura;
+}
+
+int Matriz::maximo(int a, int b){
+    if(a>b){
+        return a;
+    }else{
+        return b;
+    }
+}
+
+int Matriz::obtenerFE(nodoAVL *aux){
+    if (aux == nullptr)
+    {
+        return 0;
+    }else
+    {
+     return altura(aux->izquierda) - altura(aux->derecha);
+    }
+}

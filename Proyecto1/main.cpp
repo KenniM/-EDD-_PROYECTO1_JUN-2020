@@ -5,7 +5,6 @@
 #include "listadoblecircular.h"
 #include "matriz.h"
 #include "windows.h"
-#include "AVL.h"
 #define _CRT_SECURE_NO_DEPRECATE
 
 
@@ -45,6 +44,7 @@ void loginAdmin(Matriz *matriz){
     cout<<endl<<"Contrasenia:";
     cin>>psw;
     if(matriz->cabecera->nombre==usr && matriz->cabecera->password==psw){
+
         system("cls");
         system("color 02");
         cout<<"Bienvenido, "<<usr<<endl;
@@ -79,6 +79,10 @@ void loginTrabajador(Matriz *matriz){
     cout<<endl<<"Departamento:";
     cin>>depto;
     if(matriz->buscarEmpleado(matriz,usr,psw,empresa,depto)){
+        //POSIBLE INSERCION DE NODOS DENTRO DE LOS AVL DE CADA USUARIO?
+       /* Nodo* sesion=matriz->localizarEmpleado(matriz,usr,psw,empresa,depto);
+        nodoAVL* activoNuevo=new nodoAVL(id(15),contadorNodos);
+        sesion->arbolPersonal=matriz->insertarNodo(activoNuevo,activoNuevo->ID)*/
         system("cls");
         system("color 02");
         cout<<"Bienvenido, "<<usr<<endl;

@@ -1,5 +1,6 @@
 #ifndef NODO_H
 #define NODO_H
+#include "AVL.h"
 #include <iostream>
 
 class Nodo {
@@ -8,6 +9,7 @@ public:
     std::string nombre;
     std::string password;
     int numero;
+    nodoAVL* arbolPersonal;
 
     Nodo(std::string nombre_, int numero_) {
         siguiente = nullptr;
@@ -16,6 +18,7 @@ public:
         abajo = nullptr;
         adelante = nullptr;
         atras = nullptr;
+        arbolPersonal=nullptr;
         nombre = nombre_;
         numero = numero_;
     }
@@ -26,6 +29,7 @@ public:
         abajo = nullptr;
         adelante = nullptr;
         atras = nullptr;
+        arbolPersonal=nullptr;
         nombre = nombre_;
         password=password_;
     }

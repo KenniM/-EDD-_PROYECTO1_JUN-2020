@@ -3,8 +3,7 @@
 #pragma once
 #include <iostream>
 using namespace std;
-string dot="digraph AVL{\n";
-int contadorNodo=0;
+
 
 class nodoAVL {
 public:
@@ -13,36 +12,40 @@ public:
   nodoAVL *izquierda;
   nodoAVL *derecha;
   int altura;
+
+  nodoAVL(std::string ID,int contadorNodo){
+      this->ID = ID;
+      auxGrafico="Nodo"+to_string(contadorNodo);
+      contadorNodo++;
+      izquierda = nullptr;
+      derecha = nullptr;
+      altura = 1;
+  }
 };
 
-int maximo(int a, int b);
+//int maximo(int a, int b);
 
-int altura(nodoAVL *nodo) {
+/*int altura(nodoAVL *nodo) {
   if (nodo == nullptr)
     return 0;
   return nodo->altura;
-}
+}*/
 
-int maximo(int a, int b) {
+/*int maximo(int a, int b) {
     if(a>b){
         return a;
     }else{
         return b;
     }
-}
+}*/
 
-nodoAVL *nuevoNodo(string ID) {
+/*nodoAVL *nuevoNodo(string ID) {
   nodoAVL *nodo = new nodoAVL();
-  nodo->ID = ID;
-  nodo->auxGrafico="Nodo"+to_string(contadorNodo);
-  contadorNodo++;
-  nodo->izquierda = nullptr;
-  nodo->derecha = nullptr;
-  nodo->altura = 1;
-  return (nodo);
-}
 
-nodoAVL *rotarDerecha(nodoAVL *y) {
+  return nodo;
+}*/
+
+/*nodoAVL *rotarDerecha(nodoAVL *y) {
   if(y)
   {
       nodoAVL *x = y->izquierda;
@@ -54,9 +57,9 @@ nodoAVL *rotarDerecha(nodoAVL *y) {
       return x;
   }
   return nullptr;
-}
+}*/
 
-nodoAVL *rotarIzquierda(nodoAVL *x) {
+/*nodoAVL *rotarIzquierda(nodoAVL *x) {
   nodoAVL *y = x->derecha;
   nodoAVL *T2 = y->izquierda;
   y->izquierda = x;
@@ -64,9 +67,9 @@ nodoAVL *rotarIzquierda(nodoAVL *x) {
   x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
   y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
   return y;
-}
+}*/
 
-int obtenerFE(nodoAVL *aux) {
+/*int obtenerFE(nodoAVL *aux) {
   if (aux == nullptr)
   {
       return 0;
@@ -74,9 +77,9 @@ int obtenerFE(nodoAVL *aux) {
   {
    return altura(aux->izquierda) - altura(aux->derecha);
   }
-}
+}*/
 
-nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
+/*nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
   if (nodo == nullptr)
   {
       return (nuevoNodo(ID));
@@ -113,18 +116,18 @@ nodoAVL *insertarNodo(nodoAVL *nodo, string ID) {
     }
   }
   return nodo;
-}
+}*/
 
-nodoAVL *valorMinimo(nodoAVL *nodo) {
+/*nodoAVL *valorMinimo(nodoAVL *nodo) {
   nodoAVL *aux = nodo;
   while (aux->izquierda != nullptr)
   {
       aux = aux->izquierda;
   }
   return aux;
-}
+}*/
 
-nodoAVL *eliminarnodoAVL(nodoAVL *raiz, string ID) {
+/*nodoAVL *eliminarnodoAVL(nodoAVL *raiz, string ID) {
   if (raiz == nullptr)
   {
       return raiz;
@@ -181,9 +184,9 @@ nodoAVL *eliminarnodoAVL(nodoAVL *raiz, string ID) {
     }
   }
   return raiz;
-}
+}*/
 
-void imprimirArbol(nodoAVL* nodo,int contador){
+/*void imprimirArbol(nodoAVL* nodo,int contador){
     if(nodo==NULL){
         return;
     }else{
@@ -194,9 +197,9 @@ void imprimirArbol(nodoAVL* nodo,int contador){
         cout<<nodo->ID<<endl;
         imprimirArbol(nodo->izquierda,contador+1);
     }
-}
+}*/
 
-void crearNodosGrafico(nodoAVL *nodo){
+/*void crearNodosGrafico(nodoAVL *nodo){
     if(nodo==NULL){
         return;
     }else{
@@ -205,9 +208,9 @@ void crearNodosGrafico(nodoAVL *nodo){
     crearNodosGrafico(nodo->izquierda);
     }
 
-}
+}*/
 
-void armarAVL(nodoAVL* nodo,nodoAVL* padre){
+/*void armarAVL(nodoAVL* nodo,nodoAVL* padre){
     if(nodo==NULL){
         return;
     }else{
@@ -218,10 +221,10 @@ void armarAVL(nodoAVL* nodo,nodoAVL* padre){
         }
         armarAVL(nodo->izquierda,nodo);
     }
-}
+}*/
 
 
-void graficarAVL(){
+/*void graficarAVL(){
     FILE * file;
     file=fopen("avl.dot","w+");
     fprintf(file,dot.c_str());
@@ -229,7 +232,7 @@ void graficarAVL(){
 
     system("dot.exe -Tpng avl.dot -o avl.png");
     system("start avl.png");
-}
+}*/
 
 
 
