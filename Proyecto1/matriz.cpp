@@ -240,6 +240,9 @@ bool Matriz::buscarEmpleado(Matriz *matriz,std::string usuario, std::string pass
                 if(tempDepto->abajo!= nullptr){
                 tempDepto=tempDepto->abajo;
                 }
+                if(tempEmpresa->siguiente==nullptr && tempDepto->siguiente==nullptr){
+                    break;
+                }
             }do{
               //  std::cout<<tempEmpresa->nombre<<", contrasenia: "<<tempEmpresa->password<<"->";
                 if(tempEmpresa->nombre==usuario && tempEmpresa->password==password){
@@ -272,6 +275,9 @@ Nodo* Matriz::localizarEmpleado(Matriz *matriz,std::string usuario, std::string 
                 if(tempDepto->abajo!= nullptr){
                 tempDepto=tempDepto->abajo;
                 }
+                if(tempEmpresa->siguiente==nullptr && tempDepto->siguiente==nullptr){
+                    break;
+                }
             }do{
               //  std::cout<<tempEmpresa->nombre<<", contrasenia: "<<tempEmpresa->password<<"->";
                 if(tempEmpresa->nombre==usuario && tempEmpresa->password==password){
@@ -283,9 +289,9 @@ Nodo* Matriz::localizarEmpleado(Matriz *matriz,std::string usuario, std::string 
             return nullptr;
         }
     }else{
-        return false;
+        return nullptr;
     }
-    return false;
+    return nullptr;
 
 }
 
