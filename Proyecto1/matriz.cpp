@@ -64,7 +64,7 @@ Nodo* Matriz::buscarEmpresa(std::string empresa, Nodo* inicio) {
 }
 
 //Inserta un nodo dentro de la matriz cúbica dispersa
-void Matriz::insertarElemento(std::string usuario, int numero, std::string empresa, std::string departamento,std::string password) {
+void Matriz::insertarElemento(std::string usuario, std::string empresa, std::string departamento,std::string password) {
 
     Nodo* NodoUsr;
     Nodo* NodoDepto;
@@ -225,11 +225,14 @@ bool Matriz::verificarDepto(std::string departamento, Nodo* inicio, Nodo* usr) {
 }
 
 void Matriz::listarEmpleados(std::string depto, std::string empresa) {
-    if(buscarEmpresa(empresa,cabecera)!= nullptr){
-        if(buscarDepto(depto,cabecera)!= nullptr){
+
+}
+
+bool Matriz::buscarEmpleado(Matriz *matriz,std::string usuario, std::string password,std::string empresa,std::string departamento){
+    if(matriz->buscarEmpresa(empresa,matriz->cabecera)!= nullptr){
+        if(matriz->buscarDepto(departamento,matriz->cabecera)!= nullptr){
             Nodo *tempEmpresa=buscarEmpresa(empresa,cabecera);
-            Nodo *tempDepto=buscarDepto(depto,cabecera);
-            std::cout<<"Mostrando los empleados de la empresa: "<<empresa<<", ubicada en el departamento de: "<<depto<<std::endl;
+            Nodo *tempDepto=buscarDepto(departamento,cabecera);
             while (tempEmpresa!=tempDepto){
                 if(tempEmpresa->siguiente!=nullptr){
                     tempEmpresa=tempEmpresa->siguiente;
@@ -238,43 +241,19 @@ void Matriz::listarEmpleados(std::string depto, std::string empresa) {
                 tempDepto=tempDepto->abajo;
                 }
             }do{
-                std::cout<<tempEmpresa->nombre<<"->";
+              //  std::cout<<tempEmpresa->nombre<<", contrasenia: "<<tempEmpresa->password<<"->";
+                if(tempEmpresa->nombre==usuario && tempEmpresa->password==password){
+                    return true;
+                }
                 tempEmpresa=tempEmpresa->atras;
             }while (tempEmpresa!= nullptr);
         }else{
-            std::cout<<"No se ha encontrado el departamento indicado"<<std::endl;
+            return false;
         }
     }else{
-        std::cout<<"No se ha encontrado la empresa indicada"<<std::endl;
-    }
-}
-
-bool Matriz::buscarEmpleado(std::string usuario, std::string password,std::string empresa,std::string departamento){
-    Nodo *aux1=cabecera; //ESTE AUXILIAR NAVEGA POR DEPARTAMENTOS
-    Nodo *aux2=aux1;     //ESTE AUXILIAR NAVEGA POR LOS USUARIOS DE ARRIBA HACIA ABAJO, LUEGO AVANZA AL DEPTO. SIGUIENTE
-    Nodo *aux3=aux1;     //ESTE AUXILIAR NAVEGA POR LAS EMPRESAS
-    std::string empTemp,empDepto;
-
-        while (aux1->siguiente!=nullptr) {
-            aux1=aux1->siguiente;
-            aux2=aux1;
-            while (aux2->abajo!=nullptr) {
-                aux2=aux2->abajo;
-                if(aux3->abajo!=nullptr){
-                    aux3=aux3->abajo;
-                }
-                if(aux2->nombre==usuario && aux2->password==password && aux3->nombre==empresa && aux1->nombre==departamento){
-                    return true;
-                }
-                while (aux2->atras!=nullptr) {
-                    aux2=aux2->atras;
-                    if(aux2->nombre==usuario && aux2->password==password && aux3->nombre==empresa && aux1->nombre==departamento){
-                        return true;
-                    }
-                }
-            }aux3=cabecera->abajo;
-        }
         return false;
+    }
+    return false;
 
 }
 

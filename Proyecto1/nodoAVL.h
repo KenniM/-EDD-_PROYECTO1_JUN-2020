@@ -42,13 +42,17 @@ nodoAVL *nuevoNodo(string ID) {
 }
 
 nodoAVL *rotarDerecha(nodoAVL *y) {
-  nodoAVL *x = y->izquierda;
-  nodoAVL *T2 = x->derecha;
-  x->derecha = y;
-  y->izquierda = T2;
-  y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
-  x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
-  return x;
+  if(y)
+  {
+      nodoAVL *x = y->izquierda;
+      nodoAVL *T2 = x->derecha;
+      x->derecha = y;
+      y->izquierda = T2;
+      y->altura = maximo(altura(y->izquierda), altura(y->derecha)) +1;
+      x->altura = maximo(altura(x->izquierda), altura(x->derecha)) +1;
+      return x;
+  }
+  return nullptr;
 }
 
 nodoAVL *rotarIzquierda(nodoAVL *x) {

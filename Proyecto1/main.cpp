@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+#include "listadoblecircular.h"
 #include "matriz.h"
 #include "nodoAVL.h"
 #include "windows.h"
@@ -9,7 +10,9 @@
 
 
 using namespace std;
+int tipoRecorrido=0;
 void menuPrincipal(Matriz*);
+void menuAdmin(Matriz*);
 
 string id(int limite){
     int tamanio=limite;
@@ -46,11 +49,14 @@ void loginAdmin(Matriz *matriz){
         system("color 02");
         cout<<"Bienvenido, "<<usr<<endl;
         system("pause");
-        menuPrincipal(matriz);
+        menuAdmin(matriz);
     }else{
         system("cls");
         system("color c0");
-        cout<<"Credenciales incorrectas, intente de nuevo"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"--------------------------------------------- CREDENCIALES INCORRECTAS ------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"Esta cuenta no pertenece al administrador, intente de nuevo"<<endl;
         system("pause");
         menuPrincipal(matriz);
     }
@@ -61,6 +67,7 @@ void loginTrabajador(Matriz *matriz){
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<"--------------------------------------------- INICIANDO COMO TRABAJADOR -----------------------------------------------"<<endl;
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+    matriz->recorrerXY();
     string usr,psw,empresa,depto;
     cout<<"Por favor, inicie sesion para continuar: "<<endl;
     cout<<"Usuario:";
@@ -71,7 +78,7 @@ void loginTrabajador(Matriz *matriz){
     cin>>empresa;
     cout<<endl<<"Departamento:";
     cin>>depto;
-    if(matriz->buscarEmpleado(usr,psw,empresa,depto)){
+    if(matriz->buscarEmpleado(matriz,usr,psw,empresa,depto)){
         system("cls");
         system("color 02");
         cout<<"Bienvenido, "<<usr<<endl;
@@ -80,7 +87,10 @@ void loginTrabajador(Matriz *matriz){
     }else{
         system("cls");
         system("color c0");
-        cout<<"Lo sentimos, pero "<<usr<<" no se ha encontrado dentro de los usuarios registrados"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"--------------------------------------------- CREDENCIALES INCORRECTAS ------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"Lo sentimos, pero "<<usr<<" no se ha encontrado con los datos proporcionados. Intente de nuevo"<<endl;
         system("pause");
         menuPrincipal(matriz);
     }
@@ -89,7 +99,7 @@ void loginTrabajador(Matriz *matriz){
 void menuPrincipal(Matriz *cubo)
 {
     int opcion;
-    //system("cls");
+    system("cls");
     system("color 07");
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<"------------------------------------------------- INICIO DE SESION ----------------------------------------------------"<<endl;
@@ -112,8 +122,87 @@ void menuPrincipal(Matriz *cubo)
 
 }
 
-void menuAdmin(){
+void menuAdmin(Matriz *cubo){
+    int opcion;
+    system("cls");
+    system("color 07");
+    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"----------------------------------------------- MENU DE ADMINISTRADOR -------------------------------------------------"<<endl;
+    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"1. Registrar usuario."<<endl;
+    cout<<"2. Generar reporte de la matriz dispersa (primer cara)."<<endl;
+    cout<<"3. Generar reporte de usuarios de una sucursal (profundidad del cubo para un solo nodo)."<<endl;
+    cout<<"4. Generar reporte activos disponibles en un departamento"<<endl;
+    cout<<"5. Generar reporte de activos disponibles en una empresa."<<endl;
+    cout<<"6. Generar reporte de transacciones."<<endl;
+    cout<<"7. Generar reporte de activos de un usuario."<<endl;
+    cout<<"8. Generar reporte de activos rentados por un usuario."<<endl;
+    cout<<"9. Configurar orden del ordenamiento de las transacciones."<<endl;
+    cout<<"10. Salir al menu principal"<<endl;
+    cin>>opcion;
 
+    switch (opcion) {
+    case 1:
+    {
+        system("cls");
+        system("color 07");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"----------------------------------------------- CREAR UN NUEVO USUARIO ------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+
+        string usuario,empresa,departamento,password;
+        cout<<"Ingrese el nombre del nuevo usuario:"<<endl;
+        cin>>usuario;
+        cout<<"Ingrese la contrasenia del nuevo usuario:"<<endl;
+        cin>>password;
+        cout<<"Ingrese la empresa a la que pertenece el nuevo usuario:"<<endl;
+        cin>>empresa;
+        cout<<"Ingrese el departamento de la sucursal de la empresa en la que trabajara el nuevo usuario:"<<endl;
+        cin>>departamento;
+        try {
+            cubo->insertarElemento(usuario,empresa,departamento,password);
+            system("cls");
+            system("color 02");
+            cout<<"Se han guardado los datos correctamente."<<endl;
+            cout<<"Mostrando los usuarios pertenecientes a esta sucursal:"<<endl;
+            cubo->listarEmpleados(departamento,empresa);
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        } catch (exception ex) {
+            system("cls");
+            system("color c0");
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"Se ha producido un error al ingresar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        }
+
+        break;
+    }
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        break;
+    case 8:
+        break;
+    case 9:
+        break;
+    case 10:
+        menuPrincipal(cubo);
+        break;
+    }
 }
 
 
@@ -122,38 +211,47 @@ void menuAdmin(){
 int main()
 {srand(time(NULL));
     Matriz *cubo=new Matriz();
+    nodoLista *lista=new nodoLista();
 
-    cubo->insertarElemento("Mynor", 1, "MAX", "Guatemala","mynor1");
-    cubo->insertarElemento("Susan", 2, "hp", "Jutiapa","susan2");
-    cubo->insertarElemento("Susel", 3, "hp", "Jalapa","susel3");
-    cubo->insertarElemento("Roxana", 4, "Walmart", "Jalapa","roxana4");
-    cubo->insertarElemento("Andrea", 5, "Walmart", "Jalapa","andrea5");
-    cubo->insertarElemento("Sebas", 6, "Walmart", "Jalapa","sebas6");
-    cubo->insertarElemento("Andres", 7, "hp", "Guatemala","andres7");
-    cubo->insertarElemento("Willy", 8, "MAX", "Jalapa","willy7");
+    cubo->insertarElemento("Mynor", "MAX", "Guatemala","mynor1");
+    cubo->insertarElemento("Susan", "hp", "Jutiapa","susan2");
+    cubo->insertarElemento("Susel", "hp", "Jalapa","susel3");
+    cubo->insertarElemento("Roxana", "Walmart", "Jalapa","roxana4");
+    cubo->insertarElemento("Andrea", "Walmart", "Jalapa","andrea5");
+    cubo->insertarElemento("Sebas", "Walmart", "Jalapa","sebas6");
+    cubo->insertarElemento("Andres", "hp", "Guatemala","andres7");
+    cubo->insertarElemento("Willy", "MAX", "Jalapa","willy7");
 
     cubo->recorrerXY();
 
-    nodoAVL *arbol=nullptr;
+    /*nodoAVL *arbol=nullptr;
     arbol=insertarNodo(arbol,id(15));
     arbol=insertarNodo(arbol,id(15));
     arbol=insertarNodo(arbol,id(15));
     arbol=insertarNodo(arbol,id(15));
     arbol=insertarNodo(arbol,id(15));
     arbol=insertarNodo(arbol,id(15));
-    arbol=insertarNodo(arbol,id(15));
+    arbol=insertarNodo(arbol,id(15));*/
 
-    imprimirArbol(arbol,0);
+
+
+    //graficarLista(tipoRecorrido);
+    system("pause");
     cout<<endl;
 
-    crearNodosGrafico(arbol);
+    /*imprimirArbol(arbol,0);
+    cout<<endl;*/
+
+    system("pause");
+
+    /*crearNodosGrafico(arbol);
     armarAVL(arbol,arbol);
     dot+="}";
     cout<<dot;
 
-    graficarAVL();
+    graficarAVL();*/
 
-    //menuPrincipal(cubo);
+    menuPrincipal(cubo);
 
 
 

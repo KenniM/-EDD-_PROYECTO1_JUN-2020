@@ -10,7 +10,7 @@ public:
     Matriz(){
         cabecera=new Nodo("admin","admin1234");
     }
-    void insertarElemento(std::string nombre,int numero,std::string empresa,std::string departamento,std::string password);
+    void insertarElemento(std::string nombre,std::string empresa,std::string departamento,std::string password);
     Nodo* crearEmpresa(std::string empresa);
     Nodo* crearDepartamento(std::string departamento);
     Nodo* buscarEmpresa(std::string empresa, Nodo* inicio);
@@ -18,7 +18,7 @@ public:
     bool verificarEmpresa(std::string empresa, Nodo* inicio, Nodo* usr);
     bool verificarDepto(std::string depto, Nodo* inicio, Nodo* usr);
     void listarEmpleados(std::string depto,std::string empresa);
-    bool buscarEmpleado(std::string usuario,std::string password,std::string empresa,std::string departamento);
+    bool buscarEmpleado(Matriz* ,std::string usuario,std::string password,std::string empresa,std::string departamento);
     void recorrerXY();
 
 };
