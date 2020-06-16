@@ -2,7 +2,6 @@
 // Created by Kenni on 05/06/2020.
 //
 
-#include "nodo.h"
 #include "matriz.h"
 #include <algorithm>
 
@@ -224,10 +223,6 @@ bool Matriz::verificarDepto(std::string departamento, Nodo* inicio, Nodo* usr) {
     return false;
 }
 
-void Matriz::listarEmpleados(std::string depto, std::string empresa) {
-
-}
-
 bool Matriz::buscarEmpleado(Matriz *matriz,std::string usuario, std::string password,std::string empresa,std::string departamento){
     if(matriz->buscarEmpresa(empresa,matriz->cabecera)!= nullptr){
         if(matriz->buscarDepto(departamento,matriz->cabecera)!= nullptr){
@@ -236,6 +231,9 @@ bool Matriz::buscarEmpleado(Matriz *matriz,std::string usuario, std::string pass
             while (tempEmpresa!=tempDepto){
                 if(tempEmpresa->siguiente!=nullptr){
                     tempEmpresa=tempEmpresa->siguiente;
+                }
+                if(tempEmpresa==tempDepto){
+                    break;
                 }
                 if(tempDepto->abajo!= nullptr){
                 tempDepto=tempDepto->abajo;

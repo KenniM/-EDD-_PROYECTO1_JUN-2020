@@ -4,8 +4,8 @@
 #include <time.h>
 #include "listadoblecircular.h"
 #include "matriz.h"
-#include "nodoAVL.h"
 #include "windows.h"
+#include "AVL.h"
 #define _CRT_SECURE_NO_DEPRECATE
 
 
@@ -137,8 +137,9 @@ void menuAdmin(Matriz *cubo){
     cout<<"6. Generar reporte de transacciones."<<endl;
     cout<<"7. Generar reporte de activos de un usuario."<<endl;
     cout<<"8. Generar reporte de activos rentados por un usuario."<<endl;
-    cout<<"9. Configurar orden del ordenamiento de las transacciones."<<endl;
+    cout<<"9. Configurar el ordenamiento de las transacciones."<<endl;
     cout<<"10. Salir al menu principal"<<endl;
+    cout<<"Seleccione una de las opciones anteriores para continuar:"<<endl;
     cin>>opcion;
 
     switch (opcion) {
@@ -164,8 +165,6 @@ void menuAdmin(Matriz *cubo){
             system("cls");
             system("color 02");
             cout<<"Se han guardado los datos correctamente."<<endl;
-            cout<<"Mostrando los usuarios pertenecientes a esta sucursal:"<<endl;
-            cubo->listarEmpleados(departamento,empresa);
             system("pause");
             menuAdmin(cubo);
             break;
@@ -198,7 +197,37 @@ void menuAdmin(Matriz *cubo){
     case 8:
         break;
     case 9:
+    { system("cls");
+        system("color 07");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"---------------------------------------------- CONFIGURAR TRANSACCIONES -----------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"Ingrese una de las dos opciones para ordenar la lista de transacciones, esto se podra ver al momento de generar el reporte correspondiente:"<<endl;
+        cout<<"0. Ordenamiento ascendente."<<endl;
+        cout<<"1. Ordenamiento descendente."<<endl;
+        cout<<"Ingrese una opcion para continuar"<<endl;
+        int opcionR;
+        cin>>opcionR;
+        switch (opcionR) {
+        case 0:
+            system("cls");
+            system("color 02");
+            tipoRecorrido=0;
+            cout<<"Se ha configurado la lista de transacciones en orden ascendente."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        case 1:
+            system("cls");
+            system("color 02");
+            tipoRecorrido=1;
+            cout<<"Se ha configurado la lista de transacciones en orden descendente."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        }
         break;
+    }
     case 10:
         menuPrincipal(cubo);
         break;

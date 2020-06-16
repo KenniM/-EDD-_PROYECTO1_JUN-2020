@@ -1,5 +1,6 @@
 #ifndef NODOAVL_H
 #define NODOAVL_H
+#pragma once
 #include <iostream>
 using namespace std;
 string dot="digraph AVL{\n";

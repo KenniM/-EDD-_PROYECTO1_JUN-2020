@@ -25,7 +25,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    AVL.h \
     listaDobleCircular.h \
     matriz.h \
-    nodo.h \
-    nodoAVL.h
+    nodo.h
