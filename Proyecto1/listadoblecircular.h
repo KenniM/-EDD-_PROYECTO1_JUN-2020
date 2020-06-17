@@ -1,22 +1,32 @@
 #ifndef LISTADOBLECIRCULAR_H
 #define LISTADOBLECIRCULAR_H
+#include <ctime>
 
 #include <iostream>
 using namespace std;
 int contadorNodos=0;
 
 struct nodoLista{
-    string dato;
+    string ID;
+    string rentador;
+    string empresaRentador;
+    string deptoRentaodr;
     string auxGrafico;
+    char* fechaRenta;
     nodoLista *siguiente;
     nodoLista *anterior;
 }*primero,*ultimo;
 
-void insertarNodoLista(string valor){
+void insertarNodoLista(string id_,string idRentador,string empresa,string depto){
     nodoLista *nuevo=new nodoLista();
-    nuevo->dato=valor;
+    nuevo->ID=id_;
+    nuevo->rentador=idRentador;
     nuevo->auxGrafico="Nodo"+to_string(contadorNodos);
     contadorNodos++;
+    nuevo->empresaRentador=empresa;
+    nuevo->deptoRentaodr=depto;
+    time_t fechaActual=time(0);
+    nuevo->fechaRenta=ctime(&fechaActual);
 
     if(primero==nullptr){
         primero=nuevo;
@@ -24,7 +34,7 @@ void insertarNodoLista(string valor){
         primero->siguiente=primero;
         primero->anterior=ultimo;
     }else{
-        if(valor>ultimo->dato){
+        if(id_>ultimo->ID){
             ultimo->siguiente=nuevo;
             nuevo->anterior=ultimo;
             nuevo->siguiente=primero;
@@ -34,14 +44,14 @@ void insertarNodoLista(string valor){
             nodoLista *aux=ultimo;
             do{
                 aux=aux->anterior;
-                if(valor>aux->dato){
+                if(id_>aux->ID){
                     nodoLista *aux2=aux->siguiente;
                     aux->siguiente=nuevo;
                     nuevo->anterior=aux;
                     nuevo->siguiente=aux2;
                     aux2->anterior=nuevo;
                 }else if(aux==primero){
-                    if(valor<aux->dato){
+                    if(id_<aux->ID){
                         primero->anterior=nuevo;
                         nuevo->siguiente=primero;
                         nuevo->anterior=ultimo;
@@ -60,13 +70,13 @@ void recorrerLista(int recorrido){
         if(recorrido==0){//ascendente
             nodoLista *aux=primero;
             do{
-                cout<<aux->dato<<" -> ";
+                cout<<aux->ID<<" -> ";
                 aux=aux->siguiente;
             }while(aux!=primero);
         }else{
             nodoLista *aux=ultimo;
             do{
-                cout<<aux->dato<<" -> ";
+                cout<<aux->ID<<" -> ";
                 aux=aux->anterior;
             }while(aux!=ultimo);
         }
@@ -82,13 +92,13 @@ void graficarLista(int recorrido){
         if(recorrido==0){//ascendente
             nodoLista *aux=primero;
             do{
-                dot+=aux->auxGrafico+"[label=\""+aux->dato+"\"]"+"\n";
+                dot+=aux->auxGrafico+"[label=\""+aux->ID+"\"]"+"\n";
                 aux=aux->siguiente;
             }while(aux!=primero);
         }else{
             nodoLista *aux=ultimo;
             do{
-                dot+=aux->auxGrafico+"[label=\""+aux->dato+"\"]"+"\n";
+                dot+=aux->auxGrafico+"[label=\""+aux->ID+"\"]"+"\n";
                 aux=aux->anterior;
             }while(aux!=ultimo);
         }

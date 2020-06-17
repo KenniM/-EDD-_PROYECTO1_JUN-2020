@@ -335,21 +335,21 @@ nodoAVL* Matriz::rotarIzquierda(nodoAVL *x){
     return y;
 }
 
-nodoAVL* Matriz::insertarNodo(nodoAVL *nodo, string ID){
+nodoAVL* Matriz::insertarNodo(nodoAVL *nodo, string ID,string activo,string desc){
     if (nodo == nullptr)
     {
-        nodo=new nodoAVL(ID,contadorNodo);
+        nodo=new nodoAVL(ID,contadorNodo,activo,desc);
         contadorNodo++;
         return nodo;
     }
     if (ID > nodo->ID)
     {
-        nodo->izquierda = insertarNodo(nodo->izquierda, ID);
+        nodo->izquierda = insertarNodo(nodo->izquierda, ID,activo,desc);
         contadorNodo++;
     }
     else if (ID < nodo->ID)
     {
-        nodo->derecha = insertarNodo(nodo->derecha, ID);
+        nodo->derecha = insertarNodo(nodo->derecha, ID,activo,desc);
         contadorNodo++;
     }
     else
@@ -459,39 +459,49 @@ void Matriz::imprimirArbol(nodoAVL *nodo, int contador){
     }
 }
 
-void Matriz::crearNodosGrafico(nodoAVL *nodo,string dot){
+string Matriz::crearNodosGrafico(nodoAVL *nodo){
+    string dot="";
     if(nodo==NULL){
-        return;
+        return dot;
     }else{
-    crearNodosGrafico(nodo->derecha,dot);
-    dot+=nodo->auxGrafico+" [label=\""+nodo->ID+"\"]\n";
-    crearNodosGrafico(nodo->izquierda,dot);
+    dot+=crearNodosGrafico(nodo->derecha);
+    if(nodo->rentado){
+        dot+=nodo->auxGrafico+" [style=filled color=gray label=\"ID: "+nodo->ID+" \\l Activo: "+nodo->activo+"\\l Descripcion: "+ nodo->descripcion+ "\\l Estado: Rentado\"]\n";
+    }else
+    {
+        dot+=nodo->auxGrafico+" [label=\"ID: "+nodo->ID+" \\l Activo: "+nodo->activo+"\\l Descripcion:"+ nodo->descripcion+ "\\l Estado: Sin rentar\"]\n";
+    }
+    dot+=crearNodosGrafico(nodo->izquierda);
     }
 }
 
-void Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre,string dot){
+string Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre){
+    string dot="";
     if(nodo==NULL){
-        return;
+        return dot;
     }else{
-        armarAVL(nodo->derecha,nodo,dot);
+        dot+=armarAVL(nodo->derecha,nodo);
         if(nodo!=padre)
         {
             dot+=padre->auxGrafico+" -> "+nodo->auxGrafico+"\n";
         }
-        armarAVL(nodo->izquierda,nodo,dot);
+        dot+=armarAVL(nodo->izquierda,nodo);
     }
 }
 
 void Matriz::graficarAVL(nodoAVL* arbol){
     string dot="digraph AVL{\n";
-    crearNodosGrafico(arbol,dot);
-    armarAVL(arbol,arbol,dot);
+    dot+=crearNodosGrafico(arbol);
+    dot+=armarAVL(arbol,arbol);
+    dot+="}";
+    cout<<dot<<endl;
+    system("pause");
     FILE * file;
     file=fopen("avl.dot","w+");
     fprintf(file,dot.c_str());
     fclose(file);
 
-    system("dot.exe -Tpng avl.dot -o avl.png");
+    system("dot.exe -Tpng -Gdpi=350 avl.dot -o avl.png");
     system("start avl.png");
 }
 
@@ -517,4 +527,50 @@ int Matriz::obtenerFE(nodoAVL *aux){
     {
      return altura(aux->izquierda) - altura(aux->derecha);
     }
+}
+
+void Matriz::inOrden(nodoAVL *arbol){
+    if(arbol==nullptr){
+        return;
+    }else{
+        inOrden(arbol->izquierda);
+       cout<<"-->"<<"ID: "<<arbol->ID<<" || Nombre: "<<arbol->activo<<" || Descripcion: "<<arbol->descripcion<<endl;
+        inOrden(arbol->derecha);
+    }
+}
+
+void Matriz::preOrden(nodoAVL *arbol){
+    if(arbol==nullptr){
+        return;
+    }else{
+       // cout<<arbol->dato<<" - ";
+        preOrden(arbol->izquierda);
+        preOrden(arbol->derecha);
+    }
+}
+
+void Matriz::postOrden(nodoAVL *arbol){
+    if(arbol==nullptr){
+        return;
+    }else{
+        postOrden(arbol->izquierda);
+        postOrden(arbol->derecha);
+        //cout<<arbol->dato<<" - ";
+
+    }
+}
+
+nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string activo, string descripcion){
+    if(arbol==nullptr){
+        return arbol;
+    }else{
+        modificarNodoAVL(arbol->izquierda,id_,activo,descripcion);
+        if(arbol->ID==id_){
+            arbol->activo=activo;
+            arbol->descripcion=descripcion;
+            return nullptr;
+        }modificarNodoAVL(arbol->derecha,id_,activo,descripcion);
+
+    }
+    return arbol;
 }

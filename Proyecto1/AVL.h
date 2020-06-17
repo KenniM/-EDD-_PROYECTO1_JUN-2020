@@ -9,14 +9,19 @@ class nodoAVL {
 public:
   string ID;
   string auxGrafico;
+  string activo;
+  string descripcion;
+  bool rentado;
   nodoAVL *izquierda;
   nodoAVL *derecha;
   int altura;
 
-  nodoAVL(std::string ID,int contadorNodo){
+  nodoAVL(std::string ID,int contadorNodo,string activo,string desc){
       this->ID = ID;
       auxGrafico="Nodo"+to_string(contadorNodo);
-      contadorNodo++;
+      this->activo=activo;
+      this->descripcion=desc;
+      this->rentado=false;
       izquierda = nullptr;
       derecha = nullptr;
       altura = 1;

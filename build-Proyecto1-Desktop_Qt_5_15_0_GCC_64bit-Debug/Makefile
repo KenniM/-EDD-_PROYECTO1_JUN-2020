@@ -248,6 +248,7 @@ DIST          = /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/qt_config.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/spec_post.prf \
+		../Proyecto1/.qmake.stash \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/toolchain.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -266,10 +267,10 @@ DIST          = /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/exceptions.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/yacc.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/lex.prf \
-		../Proyecto1/Proyecto1.pro ../Proyecto1/listadoblecircular.h \
+		../Proyecto1/Proyecto1.pro ../Proyecto1/AVL.h \
+		../Proyecto1/listadoblecircular.h \
 		../Proyecto1/matriz.h \
-		../Proyecto1/nodo.h \
-		../Proyecto1/nodoAVL.h ../Proyecto1/main.cpp \
+		../Proyecto1/nodo.h ../Proyecto1/main.cpp \
 		../Proyecto1/matriz.cpp \
 		../Proyecto1/nodo.cpp
 QMAKE_TARGET  = Proyecto1
@@ -473,6 +474,7 @@ Makefile: ../Proyecto1/Proyecto1.pro /home/kenni/Qt/5.15.0/gcc_64/mkspecs/linux-
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/qt_config.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/toolchain.prf \
 		/home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -683,6 +685,7 @@ Makefile: ../Proyecto1/Proyecto1.pro /home/kenni/Qt/5.15.0/gcc_64/mkspecs/linux-
 /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/qt_config.prf:
 /home/kenni/Qt/5.15.0/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/toolchain.prf:
 /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/default_pre.prf:
@@ -717,7 +720,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /home/kenni/Qt/5.15.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Proyecto1/listadoblecircular.h ../Proyecto1/matriz.h ../Proyecto1/nodo.h ../Proyecto1/nodoAVL.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Proyecto1/AVL.h ../Proyecto1/listadoblecircular.h ../Proyecto1/matriz.h ../Proyecto1/nodo.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../Proyecto1/main.cpp ../Proyecto1/matriz.cpp ../Proyecto1/nodo.cpp $(DISTDIR)/
 
 
@@ -824,14 +827,16 @@ main.o: ../Proyecto1/main.cpp /home/kenni/Qt/5.15.0/gcc_64/include/QtCore/QCoreA
 		../Proyecto1/listadoblecircular.h \
 		../Proyecto1/matriz.h \
 		../Proyecto1/nodo.h \
-		../Proyecto1/nodoAVL.h
+		../Proyecto1/AVL.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Proyecto1/main.cpp
 
-matriz.o: ../Proyecto1/matriz.cpp ../Proyecto1/nodo.h \
-		../Proyecto1/matriz.h
+matriz.o: ../Proyecto1/matriz.cpp ../Proyecto1/matriz.h \
+		../Proyecto1/nodo.h \
+		../Proyecto1/AVL.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o matriz.o ../Proyecto1/matriz.cpp
 
-nodo.o: ../Proyecto1/nodo.cpp ../Proyecto1/nodo.h
+nodo.o: ../Proyecto1/nodo.cpp ../Proyecto1/nodo.h \
+		../Proyecto1/AVL.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o nodo.o ../Proyecto1/nodo.cpp
 
 ####### Install

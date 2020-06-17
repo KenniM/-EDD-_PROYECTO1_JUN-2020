@@ -12,6 +12,7 @@ using namespace std;
 int tipoRecorrido=0;
 void menuPrincipal(Matriz*);
 void menuAdmin(Matriz*);
+void menuCliente(Matriz*,Nodo*);
 
 string id(int limite){
     int tamanio=limite;
@@ -32,17 +33,193 @@ string id(int limite){
     return temp;
 }
 
+void menuCliente(Matriz* cubo,Nodo *usuario){
+    int opcion;
+    system("cls");
+    system("color 07");
+    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"------------------------------------------- MENU DE "<<usuario->nombre<< " ----------------------------------------------"<<endl;
+    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+    cout<<"1. Agregar un nuevo activo."<<endl;
+    cout<<"2. Eliminar un activo"<<endl;
+    cout<<"3. Modificar un activo."<<endl;
+    cout<<"4. Rentar un activo."<<endl;
+    cout<<"5. Ver activos rentados."<<endl;
+    cout<<"6. Ver mis activos rentados"<<endl;
+    cout<<"7. Cerrar sesion."<<endl;
+    cout<<"Ingrese una de las opciones disponibles:"<<endl;
+    cin>>opcion;
+    switch (opcion){
+    case 1:
+    {
+        system("cls");
+        system("color 07");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"------------------------------------------- CREACION DE UN NUEVO ACTIVO -----------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"Ingrese el nombre de su nuevo activo:"<<endl;
+        string nombre="";
+        while(nombre=="")
+        {getline(cin,nombre);}
+        cout<<"Ingrese una pequenia descripcion de su nuevo activo:"<<endl;
+        string descripcion;
+        getline(cin,descripcion);
+        try {
+            string nuevoID=id(15);
+            usuario->arbolPersonal=cubo->insertarNodo(usuario->arbolPersonal,nuevoID,nombre,descripcion);
+            system("color 02");
+            cout<<"El activo se ha guardado correctamente, su ID es: "<<nuevoID<<endl;
+            system("pause");
+            menuCliente(cubo,usuario);
+            break;
+        } catch (exception ex) {
+            system("cls");
+            system("color c0");
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"Se ha producido un error al ingresar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+            system("pause");
+            menuCliente(cubo,usuario);
+            break;
+        }
+        break;
+    }
+    case 2:
+
+    {   if(usuario->arbolPersonal!=nullptr){
+        system("cls");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"-------------------------------------------------- ELIMINAR ACTIVO ----------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"A continuacion se muestran sus activos, escoja el que desea eliminar e ingrese su ID para continuar:"<<endl;
+        string idAEliminar;
+        cubo->inOrden(usuario->arbolPersonal);
+        cout<<"Si desea cancelar la operacion, ingrese 0."<<endl;
+        cin>>idAEliminar;
+        if(idAEliminar!="0")
+        {
+            try {
+                cubo->eliminarnodoAVL(usuario->arbolPersonal,idAEliminar);
+                system("cls");
+                system("color 02");
+                cout<<"El dato se ha eliminado correctamente."<<endl;
+                system("pause");
+                menuCliente(cubo,usuario);
+                break;
+            } catch (exception ex) {
+                system("cls");
+                system("color c0");
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"Se ha producido un error al eliminar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+                cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
+                system("pause");
+                menuCliente(cubo,usuario);
+                break;
+            }
+        }else{
+            menuCliente(cubo,usuario);
+            break;
+        }
+
+        }else{
+            system("cls");
+            system("color 60");
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"--------------------------------------------------- SIN ACTIVOS! ------------------------------------------------------"<<endl;
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"Esta cuenta todavia no cuenta con activos."<<endl;
+            system("pause");
+            menuCliente(cubo,usuario);
+        }
+        break;}
+    case 3:
+        if(usuario->arbolPersonal!=nullptr){
+                system("cls");
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"-------------------------------------------------- MODIFICAR ACTIVO ---------------------------------------------------"<<endl;
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"A continuacion se muestran sus activos, escoja el que desea modificar e ingrese su ID para continuar:"<<endl;
+                string idAModificar="";
+                cubo->inOrden(usuario->arbolPersonal);
+                cout<<"Si desea cancelar la operacion, ingrese 0."<<endl;
+                while(idAModificar=="")
+                {cin>>idAModificar;}
+                if(idAModificar!="0")
+                {
+                    try {
+                        string nuevoActivo="",nuevaDesc="";
+                        cout<<"Ingrese el nuevo nombre del activo: ";
+                        while(nuevoActivo==""){
+                            getline(cin,nuevoActivo);
+                        }
+                        cout<<"Ingrese una nueva descripcion para el activo recien modificado: ";
+                        getline(cin,nuevaDesc);
+                        cubo->modificarNodoAVL(usuario->arbolPersonal,idAModificar,nuevoActivo,nuevaDesc);
+                        system("color 02");
+                        cout<<"Verifique que el activo haya sido modificado correctamente, en caso de no ser asi, verifique que haya imgresado correctamente su ID."<<endl;
+                        system("pause");
+                        menuCliente(cubo,usuario);
+                        break;
+                    } catch (exception ex) {
+                        system("cls");
+                        system("color c0");
+                        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                        cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+                        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                        cout<<"Se ha producido un error al eliminar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+                        cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
+                        system("pause");
+                        menuCliente(cubo,usuario);
+                        break;
+                    }
+                }else{
+                    menuCliente(cubo,usuario);
+                    break;
+                }
+
+                }else{
+                    system("cls");
+                    system("color 60");
+                    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<"--------------------------------------------------- SIN ACTIVOS! ------------------------------------------------------"<<endl;
+                    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<"Esta cuenta todavia no cuenta con activos para modificar."<<endl;
+                    system("pause");
+                    menuCliente(cubo,usuario);
+                    break;
+                }
+                break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        menuPrincipal(cubo);
+        break;
+    default:
+        menuCliente(cubo,usuario);
+        break;
+    }
+}
+
 void loginAdmin(Matriz *matriz){
     system("cls");
+    system("color 07");
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<"------------------------------------------- INICIANDO COMO ADMINISTRADOR ----------------------------------------------"<<endl;
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
-    string usr,psw;
+    string usr="",psw;
     cout<<"Por favor, identifiquese para continuar: "<<endl;
     cout<<"Usuario:";
-    cin>>usr;
+    while(usr=="")
+    {getline(cin,usr);}
     cout<<endl<<"Contrasenia:";
-    cin>>psw;
+    getline(cin,psw);
     if(matriz->cabecera->nombre==usr && matriz->cabecera->password==psw){
 
         system("cls");
@@ -63,31 +240,31 @@ void loginAdmin(Matriz *matriz){
 }
 
 void loginTrabajador(Matriz *matriz){
+    string psw,empresa,depto;
     system("cls");
+    system("color 07");
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
     cout<<"--------------------------------------------- INICIANDO COMO TRABAJADOR -----------------------------------------------"<<endl;
     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
     matriz->recorrerXY();
-    string usr,psw,empresa,depto;
-    cout<<"Por favor, inicie sesion para continuar: "<<endl;
-    cout<<"Usuario:";
-    cin>>usr;
+    cout<<"Por favor, inicie sesion para continuar: \n";
+    cout<<"Usuario:\n";
+    string usr="";
+    while(usr=="")
+    {getline(cin,usr);}
     cout<<endl<<"Contrasenia:";
-    cin>>psw;
+    getline(cin,psw);
     cout<<"Empresa:";
-    cin>>empresa;
+    getline(cin,empresa);
     cout<<endl<<"Departamento:";
-    cin>>depto;
+    getline(cin,depto);
     if(matriz->buscarEmpleado(matriz,usr,psw,empresa,depto)){
-        //POSIBLE INSERCION DE NODOS DENTRO DE LOS AVL DE CADA USUARIO?
-       /* Nodo* sesion=matriz->localizarEmpleado(matriz,usr,psw,empresa,depto);
-        nodoAVL* activoNuevo=new nodoAVL(id(15),contadorNodos);
-        sesion->arbolPersonal=matriz->insertarNodo(activoNuevo,activoNuevo->ID)*/
+        Nodo* sesion=matriz->localizarEmpleado(matriz,usr,psw,empresa,depto);
         system("cls");
         system("color 02");
         cout<<"Bienvenido, "<<usr<<endl;
         system("pause");
-        menuPrincipal(matriz);
+        menuCliente(matriz,sesion);
     }else{
         system("cls");
         system("color c0");
@@ -155,15 +332,16 @@ void menuAdmin(Matriz *cubo){
         cout<<"----------------------------------------------- CREAR UN NUEVO USUARIO ------------------------------------------------"<<endl;
         cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
 
-        string usuario,empresa,departamento,password;
+        string usuario="",empresa,departamento,password;
         cout<<"Ingrese el nombre del nuevo usuario:"<<endl;
-        cin>>usuario;
+        while(usuario=="")
+        {getline(cin,usuario);}
         cout<<"Ingrese la contrasenia del nuevo usuario:"<<endl;
-        cin>>password;
+        getline(cin,password);
         cout<<"Ingrese la empresa a la que pertenece el nuevo usuario:"<<endl;
-        cin>>empresa;
+        getline(cin,empresa);
         cout<<"Ingrese el departamento de la sucursal de la empresa en la que trabajara el nuevo usuario:"<<endl;
-        cin>>departamento;
+        getline(cin,departamento);
         try {
             cubo->insertarElemento(usuario,empresa,departamento,password);
             system("cls");
@@ -255,8 +433,6 @@ int main()
     cubo->insertarElemento("Andres", "hp", "Guatemala","andres7");
     cubo->insertarElemento("Willy", "MAX", "Jalapa","willy7");
 
-    cubo->recorrerXY();
-
     /*nodoAVL *arbol=nullptr;
     arbol=insertarNodo(arbol,id(15));
     arbol=insertarNodo(arbol,id(15));
@@ -269,13 +445,12 @@ int main()
 
 
     //graficarLista(tipoRecorrido);
-    system("pause");
-    cout<<endl;
+
 
     /*imprimirArbol(arbol,0);
     cout<<endl;*/
 
-    system("pause");
+
 
     /*crearNodosGrafico(arbol);
     armarAVL(arbol,arbol);
