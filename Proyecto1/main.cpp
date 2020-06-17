@@ -208,17 +208,16 @@ void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
             menuCliente(cubo,usuario,empresa,depto);
             break;
         }else{
-            int tiempo;
+            string tiempo="";
             cout<<"Por cuanto tiempo desea rentar este activo?";
-            while(tiempo==0){
-                cin>>tiempo;
+            while(tiempo==""){
+                getline(cin,tiempo);
             }try {
                 if(cubo->rentarActivo(cubo,idARentar,tiempo)){
                     insertarNodoLista(id(15),idARentar,usuario->nombre,empresa,depto,tiempo);
                     system("cls");
                     system("color 02");
                     cout<<"El activo ha sido rentado exitosamente."<<endl;
-                    graficarLista(tipoRecorrido);
                     system("pause");
                     menuCliente(cubo,usuario,empresa,depto);
                     break;
@@ -340,12 +339,15 @@ void menuPrincipal(Matriz *cubo)
     switch (opcion) {
     case 1:
         loginAdmin(cubo);
+        break;
     case 2:
         loginTrabajador(cubo);
+        break;
     case 3:
         exit(0);
     default:
         menuPrincipal(cubo);
+        break;
     }
 
 }
@@ -420,6 +422,8 @@ void menuAdmin(Matriz *cubo){
     case 5:
         break;
     case 6:
+        graficarLista(tipoRecorrido);
+        menuAdmin(cubo);
         break;
     case 7:
         break;
@@ -469,7 +473,6 @@ void menuAdmin(Matriz *cubo){
 int main()
 {srand(time(NULL));
     Matriz *cubo=new Matriz();
-    nodoLista *lista=new nodoLista();
 
     cubo->insertarElemento("Mynor", "MAX", "Guatemala","mynor1");
     cubo->insertarElemento("Susan", "hp", "Jutiapa","susan2");

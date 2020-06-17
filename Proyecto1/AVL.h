@@ -11,7 +11,7 @@ public:
   string auxGrafico;
   string activo;
   string descripcion;
-  int diasRenta;
+  string diasRenta;
   bool rentado;
   nodoAVL *izquierda;
   nodoAVL *derecha;
@@ -23,7 +23,7 @@ public:
       this->activo=activo;
       this->descripcion=desc;
       this->rentado=false;
-      this->diasRenta=0;
+      this->diasRenta="";
       izquierda = nullptr;
       derecha = nullptr;
       altura = 1;

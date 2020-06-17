@@ -33,8 +33,8 @@ public:
     string crearNodosGrafico(nodoAVL*);
     string armarAVL(nodoAVL*,nodoAVL*);
     void graficarAVL(nodoAVL*);
-    nodoAVL* buscarID(nodoAVL* arbol,string clave);
-    bool rentarActivo(Matriz* matriz,string idRentado,int tiempo);
+    bool buscarID(nodoAVL* arbol,string clave,string tiempo);
+    bool rentarActivo(Matriz* matriz,string idRentado,string tiempo);
     bool verificarEmpresa(std::string empresa, Nodo* inicio, Nodo* usr);
     bool verificarDepto(std::string depto, Nodo* inicio, Nodo* usr);
     void listarEmpleados(std::string depto,std::string empresa);

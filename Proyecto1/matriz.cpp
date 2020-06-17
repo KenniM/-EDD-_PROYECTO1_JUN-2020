@@ -473,6 +473,7 @@ string Matriz::crearNodosGrafico(nodoAVL *nodo){
     }
     dot+=crearNodosGrafico(nodo->izquierda);
     }
+    return dot;
 }
 
 string Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre){
@@ -487,6 +488,7 @@ string Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre){
         }
         dot+=armarAVL(nodo->izquierda,nodo);
     }
+    return dot;
 }
 
 void Matriz::graficarAVL(nodoAVL* arbol){
@@ -585,33 +587,34 @@ nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string descripcion
     return arbol;
 }
 
-nodoAVL* Matriz::buscarID(nodoAVL* arbol,string clave){
+bool Matriz::buscarID(nodoAVL* arbol,string clave,string tiempo){
     if(arbol==nullptr){
-        return nullptr;
+        return false;
+    }else if(arbol->ID==clave){
+        arbol->rentado=true;
+        arbol->diasRenta=tiempo;
+        return true;
+    }else if(clave>arbol->ID){
+        return buscarID(arbol->izquierda,clave,tiempo);
     }else{
-        inOrden(arbol->izquierda);
-       if(arbol->ID==clave){
-           return arbol;
-       }
-        inOrden(arbol->derecha);
-    }return nullptr;
+        return buscarID(arbol->derecha,clave,tiempo);
+    }
+
 }
 
-bool Matriz::rentarActivo(Matriz* matriz,string idRentador,int tiempo){
+bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo){
     Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
     Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
-    Nodo* aux3=aux2;
-    nodoAVL* nodo;//ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
+    Nodo* aux3=aux2; //ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
+
     while(aux1!=nullptr){
         while(aux3!=nullptr)
         {
             while(aux2!=nullptr)
             {
-                nodo=matriz->buscarID(aux2->arbolPersonal,idRentador);
-                if(nodo){
-                    nodo->rentado=true;
-                    nodo->diasRenta=tiempo;
+                if(buscarID(aux2->arbolPersonal,idRentador,tiempo)){
                     return true;
+                    break;
                 }
                 aux2=aux2->atras;
             }
@@ -619,7 +622,8 @@ bool Matriz::rentarActivo(Matriz* matriz,string idRentador,int tiempo){
             aux2=aux3;
         }
         aux1=aux1->abajo;
-        aux3=aux1->siguiente;
+        if(aux1)
+        {aux3=aux1->siguiente;}
     }return false;
 }
 

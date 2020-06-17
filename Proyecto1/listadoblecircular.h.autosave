@@ -127,7 +127,7 @@ void graficarLista(int recorrido){
         fprintf(file,dot.c_str());
         fclose(file);
 
-        system("dot.exe -Tpng listaCircular.dot -o listaCircular.png");
+        system("dot.exe -Tpng -Gdpi=350 listaCircular.dot -o listaCircular.png");
         system("start listaCircular.png");
     }
 }
