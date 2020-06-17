@@ -8,26 +8,31 @@ int contadorNodos=0;
 
 struct nodoLista{
     string ID;
+    string idActivo;
     string rentador;
     string empresaRentador;
     string deptoRentaodr;
     string auxGrafico;
+    int tiempo;
     char* fechaRenta;
+    string fecha;
     nodoLista *siguiente;
     nodoLista *anterior;
 }*primero,*ultimo;
 
-void insertarNodoLista(string id_,string idRentador,string empresa,string depto){
+void insertarNodoLista(string id_,string idRentador,string nombreRenta,string empresa,string depto,int tiempo){
     nodoLista *nuevo=new nodoLista();
     nuevo->ID=id_;
-    nuevo->rentador=idRentador;
+    nuevo->idActivo=idRentador;
+    nuevo->rentador=nombreRenta;
     nuevo->auxGrafico="Nodo"+to_string(contadorNodos);
     contadorNodos++;
     nuevo->empresaRentador=empresa;
     nuevo->deptoRentaodr=depto;
     time_t fechaActual=time(0);
     nuevo->fechaRenta=ctime(&fechaActual);
-
+    nuevo->fecha=nuevo->fechaRenta;
+    nuevo->tiempo=tiempo;
     if(primero==nullptr){
         primero=nuevo;
         ultimo=nuevo;
@@ -92,13 +97,13 @@ void graficarLista(int recorrido){
         if(recorrido==0){//ascendente
             nodoLista *aux=primero;
             do{
-                dot+=aux->auxGrafico+"[label=\""+aux->ID+"\"]"+"\n";
+                dot+=aux->auxGrafico+"[label=\" Transaccion: "+aux->ID+" \\l ID del activo: "+aux->idActivo+" \\l Lo rento: "+aux->rentador+" \\l Empresa: "+aux->empresaRentador+" \\l Depto: "+aux->deptoRentaodr+"\\l Fecha de renta: "+aux->fecha+" \\l Tiempo: "+to_string(aux->tiempo)+ " dias \"]"+"\n";
                 aux=aux->siguiente;
             }while(aux!=primero);
         }else{
             nodoLista *aux=ultimo;
             do{
-                dot+=aux->auxGrafico+"[label=\""+aux->ID+"\"]"+"\n";
+                dot+=aux->auxGrafico+"[label=\" Transaccion: "+aux->ID+" \\l ID del activo: "+aux->idActivo+" \\l Lo rento: "+aux->rentador+" \\l Empresa: "+aux->empresaRentador+" \\l Depto: "+aux->deptoRentaodr+"\\l Fecha de renta: "+aux->fecha+" \\l Tiempo: "+to_string(aux->tiempo)+ " dias \"]"+"\n";
                 aux=aux->anterior;
             }while(aux!=ultimo);
         }

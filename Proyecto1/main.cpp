@@ -12,7 +12,7 @@ using namespace std;
 int tipoRecorrido=0;
 void menuPrincipal(Matriz*);
 void menuAdmin(Matriz*);
-void menuCliente(Matriz*,Nodo*);
+void menuCliente(Matriz*,Nodo*,string,string);
 
 string id(int limite){
     int tamanio=limite;
@@ -33,7 +33,7 @@ string id(int limite){
     return temp;
 }
 
-void menuCliente(Matriz* cubo,Nodo *usuario){
+void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
     int opcion;
     system("cls");
     system("color 07");
@@ -46,7 +46,8 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
     cout<<"4. Rentar un activo."<<endl;
     cout<<"5. Ver activos rentados."<<endl;
     cout<<"6. Ver mis activos rentados"<<endl;
-    cout<<"7. Cerrar sesion."<<endl;
+    cout<<"7. Devolver un activo rentado"<<endl;
+    cout<<"8. Cerrar sesion."<<endl;
     cout<<"Ingrese una de las opciones disponibles:"<<endl;
     cin>>opcion;
     switch (opcion){
@@ -70,7 +71,7 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
             system("color 02");
             cout<<"El activo se ha guardado correctamente, su ID es: "<<nuevoID<<endl;
             system("pause");
-            menuCliente(cubo,usuario);
+            menuCliente(cubo,usuario,empresa,depto);
             break;
         } catch (exception ex) {
             system("cls");
@@ -80,7 +81,7 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
             cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
             cout<<"Se ha producido un error al ingresar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
             system("pause");
-            menuCliente(cubo,usuario);
+            menuCliente(cubo,usuario,empresa,depto);
             break;
         }
         break;
@@ -105,7 +106,7 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
                 system("color 02");
                 cout<<"El dato se ha eliminado correctamente."<<endl;
                 system("pause");
-                menuCliente(cubo,usuario);
+                menuCliente(cubo,usuario,empresa,depto);
                 break;
             } catch (exception ex) {
                 system("cls");
@@ -116,11 +117,11 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
                 cout<<"Se ha producido un error al eliminar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
                 cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
                 system("pause");
-                menuCliente(cubo,usuario);
+                menuCliente(cubo,usuario,empresa,depto);
                 break;
             }
         }else{
-            menuCliente(cubo,usuario);
+            menuCliente(cubo,usuario,empresa,depto);
             break;
         }
 
@@ -132,7 +133,7 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
             cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
             cout<<"Esta cuenta todavia no cuenta con activos."<<endl;
             system("pause");
-            menuCliente(cubo,usuario);
+            menuCliente(cubo,usuario,empresa,depto);
         }
         break;}
     case 3:
@@ -150,18 +151,17 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
                 if(idAModificar!="0")
                 {
                     try {
-                        string nuevoActivo="",nuevaDesc="";
-                        cout<<"Ingrese el nuevo nombre del activo: ";
-                        while(nuevoActivo==""){
-                            getline(cin,nuevoActivo);
+                        string nuevaDesc="";
+                        cout<<"Ingrese una nueva descripcion para el activo a modificar: ";
+                        while(nuevaDesc==""){
+                            getline(cin,nuevaDesc);
                         }
-                        cout<<"Ingrese una nueva descripcion para el activo recien modificado: ";
-                        getline(cin,nuevaDesc);
-                        cubo->modificarNodoAVL(usuario->arbolPersonal,idAModificar,nuevoActivo,nuevaDesc);
+                        cubo->modificarNodoAVL(usuario->arbolPersonal,idAModificar,nuevaDesc);
                         system("color 02");
+                        cout<<"ID del activo modificado: "<<idAModificar<<" || Nueva descripcion: "<<nuevaDesc<<endl;
                         cout<<"Verifique que el activo haya sido modificado correctamente, en caso de no ser asi, verifique que haya imgresado correctamente su ID."<<endl;
                         system("pause");
-                        menuCliente(cubo,usuario);
+                        menuCliente(cubo,usuario,empresa,depto);
                         break;
                     } catch (exception ex) {
                         system("cls");
@@ -172,11 +172,11 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
                         cout<<"Se ha producido un error al eliminar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
                         cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
                         system("pause");
-                        menuCliente(cubo,usuario);
+                        menuCliente(cubo,usuario,empresa,depto);
                         break;
                     }
                 }else{
-                    menuCliente(cubo,usuario);
+                    menuCliente(cubo,usuario,empresa,depto);
                     break;
                 }
 
@@ -188,21 +188,68 @@ void menuCliente(Matriz* cubo,Nodo *usuario){
                     cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
                     cout<<"Esta cuenta todavia no cuenta con activos para modificar."<<endl;
                     system("pause");
-                    menuCliente(cubo,usuario);
+                    menuCliente(cubo,usuario,empresa,depto);
                     break;
                 }
                 break;
     case 4:
+    {system("cls");
+        string idARentar="";
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"-------------------------------------------------- RENTAR UN ACTIVO ---------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"A continuacion se muestran los activos que se encuentran disponibles para su renta. Ingrese el ID del activo que desea para continuar:"<<endl;
+        cubo->listarActivos(cubo,usuario);
+        cout<<"Ingrese un ID para seleccionar ese activo y rentarlo, si desea cancelar, escriba 0:";
+        while(idARentar==""){
+            getline(cin,idARentar);
+        }
+        if(idARentar=="0"){
+            menuCliente(cubo,usuario,empresa,depto);
+            break;
+        }else{
+            int tiempo;
+            cout<<"Por cuanto tiempo desea rentar este activo?";
+            while(tiempo==0){
+                cin>>tiempo;
+            }try {
+                if(cubo->rentarActivo(cubo,idARentar,tiempo)){
+                    insertarNodoLista(id(15),idARentar,usuario->nombre,empresa,depto,tiempo);
+                    system("cls");
+                    system("color 02");
+                    cout<<"El activo ha sido rentado exitosamente."<<endl;
+                    graficarLista(tipoRecorrido);
+                    system("pause");
+                    menuCliente(cubo,usuario,empresa,depto);
+                    break;
+                }
+} catch (exception ex) {
+                system("cls");
+                system("color c0");
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"Se ha producido un error al rentar un activo, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+                cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
+                system("pause");
+                menuCliente(cubo,usuario,empresa,depto);
+                break;
+
+}
+        }
+        system("pause");}
         break;
     case 5:
         break;
     case 6:
         break;
     case 7:
+
+    case 8:
         menuPrincipal(cubo);
         break;
     default:
-        menuCliente(cubo,usuario);
+        menuCliente(cubo,usuario,empresa,depto);
         break;
     }
 }
@@ -264,7 +311,7 @@ void loginTrabajador(Matriz *matriz){
         system("color 02");
         cout<<"Bienvenido, "<<usr<<endl;
         system("pause");
-        menuCliente(matriz,sesion);
+        menuCliente(matriz,sesion,empresa,depto);
     }else{
         system("cls");
         system("color c0");

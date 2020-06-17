@@ -20,8 +20,10 @@ public:
     nodoAVL* insertarNodo(nodoAVL*,string,string,string);
     nodoAVL* valorMinimo(nodoAVL*);
     nodoAVL* eliminarnodoAVL(nodoAVL*,string);
-    nodoAVL* modificarNodoAVL(nodoAVL* arbol,string id_,string activo,string descripcion);
+    nodoAVL* modificarNodoAVL(nodoAVL* arbol,string id_,string descripcion);
+    void listarActivos(Matriz*,Nodo* usuarioActual);
     void inOrden(nodoAVL*);
+    void inOrdenParaRenta(nodoAVL*);
     void preOrden(nodoAVL*);
     void postOrden(nodoAVL*);
     int altura(nodoAVL* nodo);
@@ -31,6 +33,8 @@ public:
     string crearNodosGrafico(nodoAVL*);
     string armarAVL(nodoAVL*,nodoAVL*);
     void graficarAVL(nodoAVL*);
+    nodoAVL* buscarID(nodoAVL* arbol,string clave);
+    bool rentarActivo(Matriz* matriz,string idRentado,int tiempo);
     bool verificarEmpresa(std::string empresa, Nodo* inicio, Nodo* usr);
     bool verificarDepto(std::string depto, Nodo* inicio, Nodo* usr);
     void listarEmpleados(std::string depto,std::string empresa);

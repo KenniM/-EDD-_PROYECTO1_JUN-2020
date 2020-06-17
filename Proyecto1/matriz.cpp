@@ -539,6 +539,17 @@ void Matriz::inOrden(nodoAVL *arbol){
     }
 }
 
+void Matriz::inOrdenParaRenta(nodoAVL *arbol){
+    if(arbol==nullptr){
+        return;
+    }else{
+        inOrdenParaRenta(arbol->izquierda);
+        if(!arbol->rentado)
+        {cout<<"-->"<<"ID: "<<arbol->ID<<" || Nombre: "<<arbol->activo<<" || Descripcion: "<<arbol->descripcion<<endl;}
+        inOrdenParaRenta(arbol->derecha);
+    }
+}
+
 void Matriz::preOrden(nodoAVL *arbol){
     if(arbol==nullptr){
         return;
@@ -560,17 +571,78 @@ void Matriz::postOrden(nodoAVL *arbol){
     }
 }
 
-nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string activo, string descripcion){
+nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string descripcion){
     if(arbol==nullptr){
         return arbol;
     }else{
-        modificarNodoAVL(arbol->izquierda,id_,activo,descripcion);
+        modificarNodoAVL(arbol->izquierda,id_,descripcion);
         if(arbol->ID==id_){
-            arbol->activo=activo;
             arbol->descripcion=descripcion;
             return nullptr;
-        }modificarNodoAVL(arbol->derecha,id_,activo,descripcion);
+        }modificarNodoAVL(arbol->derecha,id_,descripcion);
 
     }
     return arbol;
+}
+
+nodoAVL* Matriz::buscarID(nodoAVL* arbol,string clave){
+    if(arbol==nullptr){
+        return nullptr;
+    }else{
+        inOrden(arbol->izquierda);
+       if(arbol->ID==clave){
+           return arbol;
+       }
+        inOrden(arbol->derecha);
+    }return nullptr;
+}
+
+bool Matriz::rentarActivo(Matriz* matriz,string idRentador,int tiempo){
+    Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
+    Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
+    Nodo* aux3=aux2;
+    nodoAVL* nodo;//ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
+    while(aux1!=nullptr){
+        while(aux3!=nullptr)
+        {
+            while(aux2!=nullptr)
+            {
+                nodo=matriz->buscarID(aux2->arbolPersonal,idRentador);
+                if(nodo){
+                    nodo->rentado=true;
+                    nodo->diasRenta=tiempo;
+                    return true;
+                }
+                aux2=aux2->atras;
+            }
+            aux3=aux3->siguiente;
+            aux2=aux3;
+        }
+        aux1=aux1->abajo;
+        aux3=aux1->siguiente;
+    }return false;
+}
+
+void Matriz::listarActivos(Matriz *matriz, Nodo *usuarioActual){
+    Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
+    Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
+    Nodo* aux3=aux2; //ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
+    while(aux1!=nullptr){
+        while(aux3!=nullptr)
+        {
+            while(aux2!=nullptr)
+            {
+                if(aux2!=usuarioActual){
+                    matriz->inOrdenParaRenta(aux2->arbolPersonal);
+                }
+                aux2=aux2->atras;
+            }
+            aux3=aux3->siguiente;
+            aux2=aux3;
+        }
+        aux1=aux1->abajo;
+        if(aux1)
+        {aux3=aux1->siguiente;}
+    }
+
 }
