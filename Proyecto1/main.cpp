@@ -46,8 +46,7 @@ void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
     cout<<"4. Rentar un activo."<<endl;
     cout<<"5. Ver activos rentados."<<endl;
     cout<<"6. Ver mis activos rentados"<<endl;
-    cout<<"7. Devolver un activo rentado"<<endl;
-    cout<<"8. Cerrar sesion."<<endl;
+    cout<<"7. Cerrar sesion."<<endl;
     cout<<"Ingrese una de las opciones disponibles:"<<endl;
     cin>>opcion;
     switch (opcion){
@@ -213,11 +212,22 @@ void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
             while(tiempo==""){
                 getline(cin,tiempo);
             }try {
-                if(cubo->rentarActivo(cubo,idARentar,tiempo)){
+                if(cubo->rentarActivo(cubo,idARentar,tiempo,usuario->nombre,empresa,depto)){
                     insertarNodoLista(id(15),idARentar,usuario->nombre,empresa,depto,tiempo);
                     system("cls");
                     system("color 02");
                     cout<<"El activo ha sido rentado exitosamente."<<endl;
+                    system("pause");
+                    menuCliente(cubo,usuario,empresa,depto);
+                    break;
+                }else{
+                    system("cls");
+                    system("color 60");
+                    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<"----------------------------------------------- ACTIVO NO ENCONTRADO --------------------------------------------------"<<endl;
+                    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<"El ID ingresado no parece coincidir con ninguno de los activos disponibles, lo ingreso correctamente?."<<endl;
+                    cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
                     system("pause");
                     menuCliente(cubo,usuario,empresa,depto);
                     break;
@@ -229,7 +239,6 @@ void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
                 cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
                 cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
                 cout<<"Se ha producido un error al rentar un activo, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
-                cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
                 system("pause");
                 menuCliente(cubo,usuario,empresa,depto);
                 break;
@@ -239,12 +248,59 @@ void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
         system("pause");}
         break;
     case 5:
+    {system("cls");
+        string idADevolver="";
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"------------------------------------------------ VER ACTIVOS RENTADOS -------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"A continuacion se muestran los activos que se usted ha rentado para su uso:"<<endl;
+        cubo->listarRentados(cubo,usuario,usuario->nombre,empresa,depto);
+        cout<<"Si desea devolver un activo, ingrese su correspondiente ID, si desea cancelar, escriba 0:";
+        while(idADevolver==""){
+            getline(cin,idADevolver);
+        }
+        if(idADevolver=="0"){
+            menuCliente(cubo,usuario,empresa,depto);
+            break;
+        }else{
+            try {
+                if(cubo->devolverActivo(cubo,idADevolver,usuario->nombre,empresa,depto)){
+                    system("cls");
+                    system("color 02");
+                    cout<<"El activo ha sido devuelto exitosamente."<<endl;
+                    system("pause");
+                    menuCliente(cubo,usuario,empresa,depto);
+                    break;
+                }else{
+                    system("cls");
+                    system("color 60");
+                    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<"----------------------------------------------- ACTIVO NO ENCONTRADO --------------------------------------------------"<<endl;
+                    cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                    cout<<"El ID ingresado no parece coincidir con ninguno de los activos disponibles, lo ingreso correctamente?."<<endl;
+                    cout<<"*** CONSEJO: puede seleccionar el ID correspondiente, pulsar Ctrl+C para copiar y luego pulsar Ctrl+V para pegar y evitar estas fallas. ***"<<endl;
+                    system("pause");
+                    menuCliente(cubo,usuario,empresa,depto);
+                    break;
+                }
+} catch (exception ex) {
+                system("cls");
+                system("color c0");
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+                cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+                cout<<"Se ha producido un error al rentar un activo, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+                system("pause");
+                menuCliente(cubo,usuario,empresa,depto);
+                break;
+
+}
+        }
+        system("pause");}
         break;
     case 6:
         break;
     case 7:
-
-    case 8:
         menuPrincipal(cubo);
         break;
     default:

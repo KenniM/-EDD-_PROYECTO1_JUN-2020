@@ -552,6 +552,17 @@ void Matriz::inOrdenParaRenta(nodoAVL *arbol){
     }
 }
 
+void Matriz::inOrdenDevuelta(nodoAVL *arbol, string prestador, string empresa, string depto){
+    if(arbol==nullptr){
+        return;
+    }else{
+        inOrdenDevuelta(arbol->izquierda,prestador,empresa,depto);
+        if(arbol->rentado && arbol->prestador==prestador && arbol->empresaPrestador==empresa && arbol->deptoPrestador==depto)
+        {cout<<"-->"<<"ID: "<<arbol->ID<<" || Nombre: "<<arbol->activo<<" || Descripcion: "<<arbol->descripcion<<endl;}
+        inOrdenDevuelta(arbol->derecha,prestador,empresa,depto);
+    }
+}
+
 void Matriz::preOrden(nodoAVL *arbol){
     if(arbol==nullptr){
         return;
@@ -587,22 +598,43 @@ nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string descripcion
     return arbol;
 }
 
-bool Matriz::buscarID(nodoAVL* arbol,string clave,string tiempo){
+bool Matriz::buscarID(nodoAVL* arbol,string clave,string tiempo,string prestador,string empresa,string depto){
     if(arbol==nullptr){
         return false;
     }else if(arbol->ID==clave){
         arbol->rentado=true;
         arbol->diasRenta=tiempo;
+        arbol->prestador=prestador;
+        arbol->empresaPrestador=empresa;
+        arbol->deptoPrestador=depto;
         return true;
     }else if(clave>arbol->ID){
-        return buscarID(arbol->izquierda,clave,tiempo);
+        return buscarID(arbol->izquierda,clave,tiempo,prestador,empresa,depto);
     }else{
-        return buscarID(arbol->derecha,clave,tiempo);
+        return buscarID(arbol->derecha,clave,tiempo,prestador,empresa,depto);
     }
 
 }
 
-bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo){
+bool Matriz::busquedaDevuelta(nodoAVL* arbol,string clave,string prestador,string empresa,string depto){
+    if(arbol==nullptr){
+        return false;
+    }else if(arbol->ID==clave && arbol->rentado){
+        arbol->rentado=false;
+        arbol->diasRenta="";
+        arbol->prestador="";
+        arbol->empresaPrestador="";
+        arbol->deptoPrestador="";
+        return true;
+    }else if(clave>arbol->ID){
+        return busquedaDevuelta(arbol->izquierda,clave,prestador,empresa,depto);
+    }else{
+        return busquedaDevuelta(arbol->derecha,clave,prestador,empresa,depto);
+    }
+
+}
+
+bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo,string prestador,string empresa,string departamento){
     Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
     Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
     Nodo* aux3=aux2; //ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
@@ -612,7 +644,7 @@ bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo){
         {
             while(aux2!=nullptr)
             {
-                if(buscarID(aux2->arbolPersonal,idRentador,tiempo)){
+                if(buscarID(aux2->arbolPersonal,idRentador,tiempo,prestador,empresa,departamento)){
                     return true;
                     break;
                 }
@@ -627,6 +659,30 @@ bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo){
     }return false;
 }
 
+bool Matriz::devolverActivo(Matriz *matriz, string idRentado, string prestador, string empresa, string departamento){
+    Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
+    Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
+    Nodo* aux3=aux2; //ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
+
+    while(aux1!=nullptr){
+        while(aux3!=nullptr)
+        {
+            while(aux2!=nullptr)
+            {
+                if(busquedaDevuelta(aux2->arbolPersonal,idRentado,prestador,empresa,departamento)){
+                    return true;
+                    break;
+                }
+                aux2=aux2->atras;
+            }
+            aux3=aux3->siguiente;
+            aux2=aux3;
+        }
+        aux1=aux1->abajo;
+        if(aux1)
+        {aux3=aux1->siguiente;}
+    }return false;
+}
 void Matriz::listarActivos(Matriz *matriz, Nodo *usuarioActual){
     Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
     Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
@@ -649,4 +705,26 @@ void Matriz::listarActivos(Matriz *matriz, Nodo *usuarioActual){
         {aux3=aux1->siguiente;}
     }
 
+}
+void Matriz::listarRentados(Matriz *matriz, Nodo *usuarioActual,string prestador, string empresa, string depto){
+    Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
+    Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
+    Nodo* aux3=aux2; //ESTE GUIA A LOS PRIMEROS NODOS DE CADA SUCURSAL
+    while(aux1!=nullptr){
+        while(aux3!=nullptr)
+        {
+            while(aux2!=nullptr)
+            {
+                if(aux2!=usuarioActual){
+                    matriz->inOrdenDevuelta(aux2->arbolPersonal,prestador,empresa,depto);
+                }
+                aux2=aux2->atras;
+            }
+            aux3=aux3->siguiente;
+            aux2=aux3;
+        }
+        aux1=aux1->abajo;
+        if(aux1)
+        {aux3=aux1->siguiente;}
+    }
 }

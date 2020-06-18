@@ -8,6 +8,9 @@ using namespace std;
 class nodoAVL {
 public:
   string ID;
+  string prestador;
+  string empresaPrestador;
+  string deptoPrestador;
   string auxGrafico;
   string activo;
   string descripcion;
@@ -24,6 +27,9 @@ public:
       this->descripcion=desc;
       this->rentado=false;
       this->diasRenta="";
+      this->prestador="";
+      this->empresaPrestador="";
+      this->deptoPrestador="";
       izquierda = nullptr;
       derecha = nullptr;
       altura = 1;
