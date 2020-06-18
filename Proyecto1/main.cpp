@@ -547,6 +547,28 @@ void menuAdmin(Matriz *cubo){
     case 7:
         break;
     case 8:
+    {
+        system("cls");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"---------------------------------------- VER ACTIVOS RENTADOS POR UN USUARIO ------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        string usuario="",empresa="",departamento="";
+        cout<<"Ingrese el nombre del usuario que desea buscar: ";
+        while(usuario==""){
+            getline(cin,usuario);
+        }
+        cout<<"Ingrese el nombre de la empresa a la que pertenece el usuario: ";
+        while(empresa==""){
+            getline(cin,empresa);
+        }
+        cout<<"Ingrese el nombre del departamento al que pertenece el usuario: ";
+        while(departamento==""){
+            getline(cin,departamento);
+        }
+        graficarPorUsuario(usuario,empresa,departamento,tipoRecorrido);
+        menuAdmin(cubo);
+        break;
+    }
         break;
     case 9:
     { system("cls");

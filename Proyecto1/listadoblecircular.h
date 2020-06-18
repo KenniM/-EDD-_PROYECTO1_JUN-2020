@@ -132,4 +132,51 @@ void graficarLista(int recorrido){
     }
 }
 
+void graficarPorUsuario(string usuario,string empresa,string depto,int recorrido){
+    string dot="digraph Lista{\n"
+            "rankdir=LR\n"
+            "node[shape=record]\n";
+    if(primero!=nullptr)
+    {
+        if(recorrido==0){//ascendente
+            nodoLista *aux=primero;
+            do{
+                if(usuario==aux->rentador && empresa==aux->empresaRentador && depto==aux->deptoRentaodr)
+                {dot+=aux->auxGrafico+"[label=\" Transaccion: "+aux->ID+" \\l ID del activo: "+aux->idActivo+" \\l Lo rento: "+aux->rentador+" \\l Empresa: "+aux->empresaRentador+" \\l Depto: "+aux->deptoRentaodr+"\\l Fecha de renta: "+aux->fecha+" \\l Tiempo: "+aux->tiempo+ " \"]"+"\n";}
+                aux=aux->siguiente;
+            }while(aux!=primero);
+        }else{
+            nodoLista *aux=ultimo;
+            do{
+                if(usuario==aux->rentador && empresa==aux->empresaRentador && depto==aux->deptoRentaodr)
+                {dot+=aux->auxGrafico+"[label=\" Transaccion: "+aux->ID+" \\l ID del activo: "+aux->idActivo+" \\l Lo rento: "+aux->rentador+" \\l Empresa: "+aux->empresaRentador+" \\l Depto: "+aux->deptoRentaodr+"\\l Fecha de renta: "+aux->fecha+" \\l Tiempo: "+aux->tiempo+ " \"]"+"\n";}
+                aux=aux->anterior;
+            }while(aux!=ultimo);
+        }
+        if(recorrido==0){//ascendente
+            nodoLista *aux=primero;
+            do{
+                if(usuario==aux->rentador && empresa==aux->empresaRentador && depto==aux->deptoRentaodr)
+                {dot+=aux->auxGrafico+"->"+aux->siguiente->auxGrafico+"[dir=both]"+"\n";}
+                aux=aux->siguiente;
+            }while(aux!=primero);
+        }else{
+            nodoLista *aux=ultimo;
+            do{
+                if(usuario==aux->rentador && empresa==aux->empresaRentador && depto==aux->deptoRentaodr)
+                {dot+=aux->auxGrafico+"->"+aux->anterior->auxGrafico+"[dir=both]"+"\n";}
+                aux=aux->anterior;
+            }while(aux!=ultimo);
+        }
+
+        dot+="}";
+        FILE * file;
+        file=fopen("listaCircular.dot","w+");
+        fprintf(file,dot.c_str());
+        fclose(file);
+
+        system("dot.exe -Tpng -Gdpi=350 listaCircular.dot -o listaCircular.png");
+        system("start listaCircular.png");
+    }
+}
 #endif // LISTADOBLECIRCULAR_H
