@@ -386,7 +386,6 @@ nodoAVL* Matriz::valorMinimo(nodoAVL *nodo){
     }
     return aux;
 }
-
 nodoAVL* Matriz::eliminarnodoAVL(nodoAVL *raiz, string ID){
     if (raiz == nullptr)
     {
@@ -445,7 +444,6 @@ nodoAVL* Matriz::eliminarnodoAVL(nodoAVL *raiz, string ID){
     }
     return raiz;
 }
-
 void Matriz::imprimirArbol(nodoAVL *nodo, int contador){
     if(nodo==NULL){
         return;
@@ -458,7 +456,6 @@ void Matriz::imprimirArbol(nodoAVL *nodo, int contador){
         imprimirArbol(nodo->izquierda,contador+1);
     }
 }
-
 string Matriz::crearNodosGrafico(nodoAVL *nodo){
     string dot="";
     if(nodo==NULL){
@@ -475,7 +472,6 @@ string Matriz::crearNodosGrafico(nodoAVL *nodo){
     }
     return dot;
 }
-
 string Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre){
     string dot="";
     if(nodo==NULL){
@@ -485,14 +481,16 @@ string Matriz::armarAVL(nodoAVL *nodo, nodoAVL *padre){
         if(nodo!=padre)
         {
             dot+=padre->auxGrafico+" -> "+nodo->auxGrafico+"\n";
-        }
+        }if(nodo==padre)
+        {dot+="NodoNombre -> "+nodo->auxGrafico+"\n";}
+
         dot+=armarAVL(nodo->izquierda,nodo);
     }
     return dot;
 }
-
-void Matriz::graficarAVL(nodoAVL* arbol){
+void Matriz::graficarAVL(nodoAVL* arbol,string usuario){
     string dot="digraph AVL{\n";
+    dot+="NodoNombre[label=\""+usuario+"\" shape=record];\n";
     dot+=crearNodosGrafico(arbol);
     dot+=armarAVL(arbol,arbol);
     dot+="}";
@@ -506,13 +504,11 @@ void Matriz::graficarAVL(nodoAVL* arbol){
     system("dot.exe -Tpng -Gdpi=350 avl.dot -o avl.png");
     system("start avl.png");
 }
-
 int Matriz::altura(nodoAVL *nodo){
     if (nodo == nullptr)
       return 0;
     return nodo->altura;
 }
-
 int Matriz::maximo(int a, int b){
     if(a>b){
         return a;
@@ -520,7 +516,6 @@ int Matriz::maximo(int a, int b){
         return b;
     }
 }
-
 int Matriz::obtenerFE(nodoAVL *aux){
     if (aux == nullptr)
     {
@@ -530,7 +525,6 @@ int Matriz::obtenerFE(nodoAVL *aux){
      return altura(aux->izquierda) - altura(aux->derecha);
     }
 }
-
 void Matriz::inOrden(nodoAVL *arbol){
     if(arbol==nullptr){
         return;
@@ -540,7 +534,6 @@ void Matriz::inOrden(nodoAVL *arbol){
         inOrden(arbol->derecha);
     }
 }
-
 void Matriz::inOrdenParaRenta(nodoAVL *arbol){
     if(arbol==nullptr){
         return;
@@ -551,7 +544,6 @@ void Matriz::inOrdenParaRenta(nodoAVL *arbol){
         inOrdenParaRenta(arbol->derecha);
     }
 }
-
 void Matriz::inOrdenDevuelta(nodoAVL *arbol, string prestador, string empresa, string depto){
     if(arbol==nullptr){
         return;
@@ -562,7 +554,6 @@ void Matriz::inOrdenDevuelta(nodoAVL *arbol, string prestador, string empresa, s
         inOrdenDevuelta(arbol->derecha,prestador,empresa,depto);
     }
 }
-
 void Matriz::inOrdenPropios(nodoAVL *arbol){
 
     if(arbol==nullptr){
@@ -574,7 +565,6 @@ void Matriz::inOrdenPropios(nodoAVL *arbol){
         inOrdenPropios(arbol->derecha);
     }
 }
-
 void Matriz::preOrden(nodoAVL *arbol){
     if(arbol==nullptr){
         return;
@@ -584,7 +574,6 @@ void Matriz::preOrden(nodoAVL *arbol){
         preOrden(arbol->derecha);
     }
 }
-
 void Matriz::postOrden(nodoAVL *arbol){
     if(arbol==nullptr){
         return;
@@ -595,7 +584,6 @@ void Matriz::postOrden(nodoAVL *arbol){
 
     }
 }
-
 nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string descripcion){
     if(arbol==nullptr){
         return arbol;
@@ -609,7 +597,6 @@ nodoAVL* Matriz::modificarNodoAVL(nodoAVL *arbol, string id_, string descripcion
     }
     return arbol;
 }
-
 bool Matriz::buscarID(nodoAVL* arbol,string clave,string tiempo,string prestador,string empresa,string depto){
     if(arbol==nullptr){
         return false;
@@ -627,7 +614,6 @@ bool Matriz::buscarID(nodoAVL* arbol,string clave,string tiempo,string prestador
     }
 
 }
-
 bool Matriz::busquedaDevuelta(nodoAVL* arbol,string clave,string prestador,string empresa,string depto){
     if(arbol==nullptr){
         return false;
@@ -645,7 +631,6 @@ bool Matriz::busquedaDevuelta(nodoAVL* arbol,string clave,string prestador,strin
     }
 
 }
-
 bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo,string prestador,string empresa,string departamento){
     Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
     Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
@@ -670,7 +655,6 @@ bool Matriz::rentarActivo(Matriz* matriz,string idRentador,string tiempo,string 
         {aux3=aux1->siguiente;}
     }return false;
 }
-
 bool Matriz::devolverActivo(Matriz *matriz, string idRentado, string prestador, string empresa, string departamento){
     Nodo* aux1=matriz->cabecera->abajo; //ESTE GUIARA POR FILA
     Nodo* aux2=aux1->siguiente; //ESTE IRA NODO POR NODO EN PROFUNDIDAD
@@ -865,3 +849,69 @@ void Matriz::graficarProfundidad(Nodo* empresa,Nodo* depto){
      system("start profundidad.png");
 
 }
+Nodo* Matriz::buscarEmpleado(Matriz* matriz,std::string usuario,std::string empresa,std::string departamento){
+    if(matriz->buscarEmpresa(empresa,matriz->cabecera)!= nullptr){
+            if(matriz->buscarDepto(departamento,matriz->cabecera)!= nullptr){
+                Nodo *tempEmpresa=buscarEmpresa(empresa,cabecera);
+                Nodo *tempDepto=buscarDepto(departamento,cabecera);
+                while (tempEmpresa!=tempDepto){
+                    if(tempEmpresa->siguiente!=nullptr){
+                        tempEmpresa=tempEmpresa->siguiente;
+                    }
+                    if(tempEmpresa==tempDepto){
+                        break;
+                    }
+                    if(tempDepto->abajo!= nullptr){
+                    tempDepto=tempDepto->abajo;
+                    }
+                    if(tempEmpresa->siguiente==nullptr && tempDepto->siguiente==nullptr){
+                        break;
+                    }
+                }do{
+                  //  std::cout<<tempEmpresa->nombre<<", contrasenia: "<<tempEmpresa->password<<"->";
+                    if(tempEmpresa->nombre==usuario){
+                        return tempEmpresa;
+                    }
+                    tempEmpresa=tempEmpresa->atras;
+                }while (tempEmpresa!= nullptr);
+            }else{
+                return nullptr;
+            }
+        }else{
+            return nullptr;
+        }
+        return nullptr;
+
+}
+string Matriz::crearNodosAVLs(nodoAVL *nodo,string nombreUsuario){
+    string dot="";
+    if(nodo==NULL){
+        return dot;
+    }else{
+    dot+=crearNodosGrafico(nodo->derecha);
+    if(nodo->rentado){
+        dot+=nodo->auxGrafico+" [style=filled color=gray label=\"ID: "+nodo->ID+" \\l Activo: "+nodo->activo+"\\l Descripcion: "+ nodo->descripcion+ "\\l Estado: Rentado\"]\n";
+    }else
+    {
+        dot+=nodo->auxGrafico+" [label=\"ID: "+nodo->ID+" \\l Activo: "+nodo->activo+"\\l Descripcion:"+ nodo->descripcion+ "\\l Estado: Sin rentar\"]\n";
+    }
+    dot+=crearNodosGrafico(nodo->izquierda);
+    }
+    return dot;
+}
+string Matriz::armarAVLs(nodoAVL *nodo, nodoAVL *padre){
+    string dot="";
+    if(nodo==NULL){
+        return dot;
+    }else{
+        dot+=armarAVL(nodo->derecha,nodo);
+        if(nodo!=padre)
+        {
+            dot+=padre->auxGrafico+" -> "+nodo->auxGrafico+"\n";
+        }
+
+        dot+=armarAVL(nodo->izquierda,nodo);
+    }
+    return dot;
+}
+

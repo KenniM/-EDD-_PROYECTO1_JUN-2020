@@ -14,6 +14,7 @@ public:
     Nodo* buscarEmpresa(std::string empresa, Nodo* inicio);
     Nodo* buscarDepto(std::string departamento, Nodo* inicio);
     Nodo* localizarEmpleado(Matriz* ,std::string usuario,std::string password,std::string empresa,std::string departamento);
+    Nodo* buscarEmpleado(Matriz* ,std::string usuario,std::string empresa,std::string departamento);
     nodoAVL* rotarDerecha(nodoAVL*);
     nodoAVL* rotarIzquierda(nodoAVL*);
     nodoAVL* insertarNodo(nodoAVL*,string,string,string);
@@ -36,7 +37,9 @@ public:
     void imprimirArbol(nodoAVL*,int);
     string crearNodosGrafico(nodoAVL*);
     string armarAVL(nodoAVL*,nodoAVL*);
-    void graficarAVL(nodoAVL*);
+    void graficarAVL(nodoAVL*,string);
+    string crearNodosAVLs(nodoAVL *nodo,string nombreUsuario);
+    string armarAVLs(nodoAVL *nodo, nodoAVL *padre);
     bool buscarID(nodoAVL* arbol,string clave,string tiempo,string prestador,string empresa,string depto);
     bool busquedaDevuelta(nodoAVL* arbol,string clave,string prestador,string empresa,string depto);
     bool rentarActivo(Matriz* matriz,string idRentado,string tiempo,string prestador,string empresa,string departamento);

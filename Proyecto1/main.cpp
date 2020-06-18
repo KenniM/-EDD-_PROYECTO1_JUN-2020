@@ -441,6 +441,7 @@ void menuAdmin(Matriz *cubo){
     cin>>opcion;
 
     switch (opcion) {
+    //REGISTRO DE USUARIOS
     case 1:
     {
         system("cls");
@@ -481,6 +482,7 @@ void menuAdmin(Matriz *cubo){
 
         break;
     }
+    //REPORTE DE LA MATRIZ DISPERSA
     case 2:
         try {
         cubo->graficarPrimerCaraMatriz(cubo);
@@ -491,6 +493,8 @@ void menuAdmin(Matriz *cubo){
     }
 
         break;
+
+    //REPORTE DE USUARIOS EN CIERTA SUCURSA (Z)
     case 3:
     {
         system("cls");
@@ -522,10 +526,69 @@ void menuAdmin(Matriz *cubo){
     }
 
         break;
-    case 4:
+    //ACTIVOS DISPONIBLES EN UN DEPTO
+    case 4:{
+        system("cls");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"------------------------------------------- VER ACTIVOS DE UN DEPARTAMENTO --------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        string departamento="";
+        cout<<"Ingrese el nombre del departamento del que desea obtener informacion: ";
+        while(departamento==""){
+            getline(cin,departamento);
+        }
+        Nodo* depto=cubo->buscarDepto(departamento,cubo->cabecera);
+        if(depto){
+            int contador=0;
+            string dot="digraph AVLDepto{\n";
+            Nodo *auxDepto=depto;
+            Nodo *auxProfundidad=depto;
+            while (auxDepto) {
+                if(auxDepto->abajo)
+                {auxDepto=auxDepto->abajo;
+                auxProfundidad=auxDepto;
+                while (auxProfundidad) {
+                    dot+=cubo->crearNodosAVLs(auxProfundidad->arbolPersonal,auxProfundidad->nombre);
+                    dot+=cubo->armarAVLs(auxProfundidad->arbolPersonal,auxProfundidad->arbolPersonal);
+                    if(auxProfundidad->arbolPersonal)
+                    {
+                        dot+="Nodo0"+to_string(contador)+"[label=\""+auxProfundidad->nombre+"\" shape=record];\n";
+                        dot+="Nodo0"+to_string(contador)+"->"+auxProfundidad->arbolPersonal->auxGrafico+"\n";
+                        contador++;
+                    }
+                    auxProfundidad=auxProfundidad->atras;
+                }
+                }else{break;}
+
+
+            }
+            dot+="}";
+            cout<<dot;
+            system("pause");
+            FILE * file;
+            file=fopen("avlDepto.dot","w+");
+            fprintf(file,dot.c_str());
+            fclose(file);
+
+            system("dot.exe -Tpng -Gdpi=350 avlDepto.dot -o avlDepto.png");
+            system("start avlDepto.png");
+            menuAdmin(cubo);
+            break;
+        }else{
+            system("cls");
+            system("color 0c");
+            cout<<"Alguno de los valores ingresados no han sido encontrados. Intente de nuevo."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        }
+
+    }
         break;
+    //ACTIVOS DISPONIBLES EN UNA EMPRESA
     case 5:
         break;
+    //REPORTE DE TRANSACCIONES
     case 6:
         try {
         graficarLista(tipoRecorrido);
@@ -544,8 +607,44 @@ void menuAdmin(Matriz *cubo){
     }
         break;
 
+    //VER AVL DE UN USUARIO
     case 7:
+    {
+        system("cls");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"---------------------------------------------- VER ACTIVOS DE UN USUARIO ----------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        string usuario="",empresa="",departamento="";
+        cout<<"Ingrese el nombre del usuario a buscar:   ";
+        while(usuario==""){
+            getline(cin,usuario);
+        }
+        cout<<"Ingrese el nombre de la empresa a del usuario:   ";
+        while(empresa==""){
+            getline(cin,empresa);
+        }
+        cout<<"Ingrese el nombre del departamento a buscar:   ";
+        while(departamento==""){
+            getline(cin,departamento);
+        }
+
+        Nodo* auxUsuario=cubo->buscarEmpleado(cubo,usuario,empresa,departamento);
+        if(auxUsuario){
+            cubo->graficarAVL(auxUsuario->arbolPersonal,usuario);
+            menuAdmin(cubo);
+            break;
+        }else{
+            system("cls");
+            system("color 0c");
+            cout<<"Alguno de los valores ingresados no han sido encontrados. Intente de nuevo."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        }
+    }
         break;
+
+    //VER ACTIVOS RENTADOS POR UN USUARIO
     case 8:
     {
         system("cls");
@@ -570,6 +669,8 @@ void menuAdmin(Matriz *cubo){
         break;
     }
         break;
+
+    //CAMBIAR ORDEN DE LISTA DE TRANSACCIONES
     case 9:
     { system("cls");
         system("color 07");
@@ -602,14 +703,16 @@ void menuAdmin(Matriz *cubo){
         }
         break;
     }
+
+    //REGRESA A LA PANTALLA DE INICIO
     case 10:
         menuPrincipal(cubo);
         break;
+    default:
+        menuAdmin(cubo);
+        break;
     }
 }
-
-
-
 
 int main()
 {srand(time(NULL));
