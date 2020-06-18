@@ -1,5 +1,0 @@
-digraph AVL{
-Nodo0 [label="ID: 2HAMy3kC49KjlqT \l Activo: Activo1\l Descripcion:Detalles del activo 1"]
-Nodo1 [label="ID: VHv6191kLTq48fP \l Activo: Activo2\l Descripcion:Detalles del activo 2"]
-Nodo0 -> Nodo1
-}

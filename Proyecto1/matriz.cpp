@@ -804,7 +804,7 @@ void Matriz::graficarProfundidad(Nodo* empresa,Nodo* depto){
         if(depto->abajo!= nullptr){
         depto=depto->abajo;
         }
-        if(empresa->siguiente==nullptr && depto->siguiente==nullptr){
+        if(empresa->siguiente==nullptr && depto->abajo==nullptr){
             break;
         }
 
@@ -825,7 +825,7 @@ void Matriz::graficarProfundidad(Nodo* empresa,Nodo* depto){
         if(depto->abajo!= nullptr){
         depto=depto->abajo;
         }
-        if(empresa->siguiente==nullptr && depto->siguiente==nullptr){
+        if(empresa->siguiente==nullptr && depto->abajo==nullptr){
             break;
         }
 
@@ -837,8 +837,6 @@ void Matriz::graficarProfundidad(Nodo* empresa,Nodo* depto){
     }
 
     dot+="}";
-    cout<<dot;
-    system("pause");
 
     FILE * file;
      file=fopen("profundidad.dot","w+");
