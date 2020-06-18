@@ -2,7 +2,6 @@
 #define MATRIZ_H
 #include "nodo.h"
 
-
 class Matriz {
 public:
     Nodo* cabecera;
@@ -21,11 +20,13 @@ public:
     nodoAVL* valorMinimo(nodoAVL*);
     nodoAVL* eliminarnodoAVL(nodoAVL*,string);
     nodoAVL* modificarNodoAVL(nodoAVL* arbol,string id_,string descripcion);
+    void graficarPrimerCaraMatriz(Matriz*);
     void listarActivos(Matriz*,Nodo* usuarioActual);
     void listarRentados(Matriz*,Nodo* usuarioActual,string prestador, string empresa, string depto);
     void inOrden(nodoAVL*);
     void inOrdenParaRenta(nodoAVL*);
     void inOrdenDevuelta(nodoAVL *arbol,string prestador,string empresa,string depto);
+    void inOrdenPropios(nodoAVL* arbol);
     void preOrden(nodoAVL*);
     void postOrden(nodoAVL*);
     int altura(nodoAVL* nodo);

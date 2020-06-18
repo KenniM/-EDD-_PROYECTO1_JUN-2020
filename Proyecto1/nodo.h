@@ -2,12 +2,12 @@
 #define NODO_H
 #include "AVL.h"
 #include <iostream>
-
 class Nodo {
 public:
     Nodo* siguiente, * anterior, * arriba, * abajo, * adelante, * atras;
     std::string nombre;
     std::string password;
+    std::string auxGrafico;
     int numero;
     nodoAVL* arbolPersonal;
 
@@ -21,6 +21,7 @@ public:
         arbolPersonal=nullptr;
         nombre = nombre_;
         numero = numero_;
+        auxGrafico="Nodo"+nombre+nombre;
     }
     Nodo(std::string nombre_, std::string password_) {
         siguiente = nullptr;
@@ -32,6 +33,7 @@ public:
         arbolPersonal=nullptr;
         nombre = nombre_;
         password=password_;
+        auxGrafico="Nodo"+nombre+password;
     }
 
 };

@@ -6,7 +6,6 @@
 #include <algorithm>
 
 int contadorNodo=0;
-
 int compararSinMayus(std::string entrada1, std::string entrada2) {
    //convert s1 and s2 into lower case strings
    transform(entrada1.begin(), entrada1.end(), entrada1.begin(), ::tolower);
@@ -72,6 +71,7 @@ void Matriz::insertarElemento(std::string usuario, std::string empresa, std::str
     Nodo* NodoEmpresa;
 
     NodoUsr = new Nodo(usuario, password);
+
     NodoDepto = buscarDepto(departamento, cabecera);
     NodoEmpresa = buscarEmpresa(empresa, cabecera);
 
@@ -558,8 +558,20 @@ void Matriz::inOrdenDevuelta(nodoAVL *arbol, string prestador, string empresa, s
     }else{
         inOrdenDevuelta(arbol->izquierda,prestador,empresa,depto);
         if(arbol->rentado && arbol->prestador==prestador && arbol->empresaPrestador==empresa && arbol->deptoPrestador==depto)
-        {cout<<"-->"<<"ID: "<<arbol->ID<<" || Nombre: "<<arbol->activo<<" || Descripcion: "<<arbol->descripcion<<endl;}
+        {cout<<"-->"<<"ID: "<<arbol->ID<<" || Nombre: "<<arbol->activo<<" || Descripcion: "<<arbol->descripcion<<" || Tiempo: "<<arbol->diasRenta<<endl;}
         inOrdenDevuelta(arbol->derecha,prestador,empresa,depto);
+    }
+}
+
+void Matriz::inOrdenPropios(nodoAVL *arbol){
+
+    if(arbol==nullptr){
+        return;
+    }else{
+        inOrdenPropios(arbol->izquierda);
+        if(arbol->rentado)
+        {cout<<"-->"<<"ID: "<<arbol->ID<<" || Nombre: "<<arbol->activo<<" || Descripcion: "<<arbol->descripcion<<" || Tiempo: "<<arbol->diasRenta<<endl;}
+        inOrdenPropios(arbol->derecha);
     }
 }
 
@@ -727,4 +739,68 @@ void Matriz::listarRentados(Matriz *matriz, Nodo *usuarioActual,string prestador
         if(aux1)
         {aux3=aux1->siguiente;}
     }
+}
+void Matriz::graficarPrimerCaraMatriz(Matriz *cubo){
+    string dot="digraph Matriz{\n";
+    dot+="rankdir=RL\n";
+    dot+="graph [pad=\"0.25\", nodesep=\"0.75\", ranksep=\"0.75\"]\n";
+    dot+="node [shape=box];";
+
+    //CREACION DE LOS NODOS, INCLUYENDO NOMBRE
+
+    Nodo* aux=cubo->cabecera;
+    Nodo* auxFila=aux;
+
+    while(auxFila!=nullptr){
+        if(aux!=nullptr)
+        {
+            dot+=aux->auxGrafico+"[label=\""+aux->nombre+"\"];\n";
+            aux=aux->siguiente;
+        }
+        else{
+            aux=auxFila;
+            dot+="rank=same{";
+            while (aux!=nullptr) {
+                dot+=aux->auxGrafico+";";
+                aux=aux->siguiente;
+            }
+            dot+="}\n";
+            auxFila=auxFila->abajo;
+            if(auxFila)
+            {aux=auxFila;}
+        }
+    }
+
+
+    //UNION DE NODOS
+    aux=cubo->cabecera;
+    auxFila=aux;
+    while(auxFila!=nullptr){
+        if(aux!=nullptr)
+        {
+            if(aux->siguiente){
+            dot+=aux->auxGrafico+"->"+aux->siguiente->auxGrafico+"[dir=both];\n";
+            }
+            if(aux->arriba){
+                dot+=aux->auxGrafico+"->"+aux->arriba->auxGrafico+"[dir=both];\n";
+            }
+            aux=aux->siguiente;
+        }
+        else{
+            auxFila=auxFila->abajo;
+            if(auxFila)
+            {aux=auxFila;}
+        }
+    }
+
+
+    //CREACION DE IMAGEN
+    dot+="}";
+    FILE * file;
+     file=fopen("matriz.dot","w+");
+     fprintf(file,dot.c_str());
+     fclose(file);
+
+     system("dot.exe -Tpng -Gdpi=350 matriz.dot -o matriz.png");
+     system("start matriz.png");
 }

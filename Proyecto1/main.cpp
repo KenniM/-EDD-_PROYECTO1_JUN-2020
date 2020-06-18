@@ -299,6 +299,18 @@ void menuCliente(Matriz* cubo,Nodo *usuario,string empresa,string depto){
         system("pause");}
         break;
     case 6:
+    {
+        system("cls");
+        string idADevolver="";
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"------------------------------------------------ MIS ACTIVOS RENTADOS -------------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"A continuacion se muestran los activos que son suyos y han sido rentados por otros usuairos:"<<endl;
+        cubo->inOrdenPropios(usuario->arbolPersonal);
+        system("pause");
+        menuCliente(cubo,usuario,empresa,depto);
+        break;
+    }
         break;
     case 7:
         menuPrincipal(cubo);
@@ -470,6 +482,14 @@ void menuAdmin(Matriz *cubo){
         break;
     }
     case 2:
+        try {
+        cubo->graficarPrimerCaraMatriz(cubo);
+        menuAdmin(cubo);
+        break;
+    } catch (exception ex) {
+        cout<<"error";
+    }
+
         break;
     case 3:
         break;
@@ -478,9 +498,23 @@ void menuAdmin(Matriz *cubo){
     case 5:
         break;
     case 6:
+        try {
         graficarLista(tipoRecorrido);
         menuAdmin(cubo);
         break;
+    } catch (exception ex) {
+            system("cls");
+            system("color c0");
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"-------------------------------------------------- ERROR CRITICO! -----------------------------------------------------"<<endl;
+            cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+            cout<<"Se ha producido un error al consultar los datos, intente de nuevo o pruebe reiniciando la aplicacion."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+    }
+        break;
+
     case 7:
         break;
     case 8:
@@ -538,6 +572,8 @@ int main()
     cubo->insertarElemento("Sebas", "Walmart", "Jalapa","sebas6");
     cubo->insertarElemento("Andres", "hp", "Guatemala","andres7");
     cubo->insertarElemento("Willy", "MAX", "Jalapa","willy7");
+
+
 
     /*nodoAVL *arbol=nullptr;
     arbol=insertarNodo(arbol,id(15));
