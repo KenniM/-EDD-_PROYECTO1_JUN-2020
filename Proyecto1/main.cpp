@@ -487,11 +487,40 @@ void menuAdmin(Matriz *cubo){
         menuAdmin(cubo);
         break;
     } catch (exception ex) {
-        cout<<"error";
+        cout<<"error"<<endl;
     }
 
         break;
     case 3:
+    {
+        system("cls");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"-------------------------------------------- VER USUARIOS DE UNA SUCURSAL ---------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        string empresa="",departamento="";
+        cout<<"Ingrese el nombre de la empresa a buscar:   ";
+        while(empresa==""){
+            getline(cin,empresa);
+        }
+        cout<<"Ingrese el nombre del departamento a buscar:   ";
+        while(departamento==""){
+            getline(cin,departamento);
+        }
+        Nodo* empr=cubo->buscarEmpresa(empresa,cubo->cabecera);
+        Nodo* depto=cubo->buscarDepto(departamento,cubo->cabecera);
+
+        if(empr && depto){
+            cubo->graficarProfundidad(empr,depto);
+        }else{
+            system("cls");
+            system("color 0c");
+            cout<<"Alguno de los valores ingresados no han sido encontrados. Intente de nuevo."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        }
+    }
+
         break;
     case 4:
         break;

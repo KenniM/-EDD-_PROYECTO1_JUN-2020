@@ -744,7 +744,7 @@ void Matriz::graficarPrimerCaraMatriz(Matriz *cubo){
     string dot="digraph Matriz{\n";
     dot+="rankdir=RL\n";
     dot+="graph [pad=\"0.25\", nodesep=\"0.75\", ranksep=\"0.75\"]\n";
-    dot+="node [shape=box];";
+    dot+="node [shape=box]\n;";
 
     //CREACION DE LOS NODOS, INCLUYENDO NOMBRE
 
@@ -803,4 +803,65 @@ void Matriz::graficarPrimerCaraMatriz(Matriz *cubo){
 
      system("dot.exe -Tpng -Gdpi=350 matriz.dot -o matriz.png");
      system("start matriz.png");
+}
+void Matriz::graficarProfundidad(Nodo* empresa,Nodo* depto){
+    Nodo* auxEmpresa=empresa;
+    Nodo* auxDepto=depto;
+    string dot="digraph Z{\n"
+               "rankdir=LR\n"
+               "node[shape=record]\n";
+    while (empresa!=depto){
+        if(empresa->siguiente!=nullptr){
+            empresa=empresa->siguiente;
+        }
+        if(empresa==depto){
+            break;
+        }
+        if(depto->abajo!= nullptr){
+        depto=depto->abajo;
+        }
+        if(empresa->siguiente==nullptr && depto->siguiente==nullptr){
+            break;
+        }
+
+    }
+    while (empresa!=nullptr) {
+        dot+=empresa->auxGrafico+"[label=\""+empresa->nombre+ "\"];\n";
+        empresa=empresa->atras;
+    }
+    empresa=auxEmpresa;
+    depto=auxDepto;
+    while (empresa!=depto){
+        if(empresa->siguiente!=nullptr){
+            empresa=empresa->siguiente;
+        }
+        if(empresa==depto){
+            break;
+        }
+        if(depto->abajo!= nullptr){
+        depto=depto->abajo;
+        }
+        if(empresa->siguiente==nullptr && depto->siguiente==nullptr){
+            break;
+        }
+
+    }
+    while (empresa!=nullptr) {
+        if(empresa->atras)
+        {dot+=empresa->auxGrafico+"->"+empresa->atras->auxGrafico+"[dir=both];\n";}
+        empresa=empresa->atras;
+    }
+
+    dot+="}";
+    cout<<dot;
+    system("pause");
+
+    FILE * file;
+     file=fopen("profundidad.dot","w+");
+     fprintf(file,dot.c_str());
+     fclose(file);
+
+     system("dot.exe -Tpng -Gdpi=350 profundidad.dot -o profundidad.png");
+     system("start profundidad.png");
+
 }
