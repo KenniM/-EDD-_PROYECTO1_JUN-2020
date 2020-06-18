@@ -430,7 +430,7 @@ void menuAdmin(Matriz *cubo){
     cout<<"1. Registrar usuario."<<endl;
     cout<<"2. Generar reporte de la matriz dispersa (primer cara)."<<endl;
     cout<<"3. Generar reporte de usuarios de una sucursal (profundidad del cubo para un solo nodo)."<<endl;
-    cout<<"4. Generar reporte activos disponibles en un departamento"<<endl;
+    cout<<"4. Generar reporte de activos disponibles en un departamento"<<endl;
     cout<<"5. Generar reporte de activos disponibles en una empresa."<<endl;
     cout<<"6. Generar reporte de transacciones."<<endl;
     cout<<"7. Generar reporte de activos de un usuario."<<endl;

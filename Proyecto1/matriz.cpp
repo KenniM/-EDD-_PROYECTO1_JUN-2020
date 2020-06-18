@@ -296,19 +296,22 @@ Nodo* Matriz::localizarEmpleado(Matriz *matriz,std::string usuario, std::string 
 }
 
 void Matriz::recorrerXY() {
-    std::cout << "Imprimiendo..."<<std::endl;
     Nodo* x = cabecera;
     Nodo* y = x;
-    std::cout<<"Imprimiendo departamentos:"<<std::endl;
+    std::cout<<"Mostrando departamentos registrados:"<<std::endl;
+    cout<<endl;
     while (x->siguiente != nullptr) {
         x=x->siguiente;
-        std::cout<<x->nombre<<std::endl;
-    }
-    std::cout<<"Imprimiendo empresas:"<<std::endl;
+        std::cout<<x->nombre<<" || ";
+    }cout<<endl;
+    cout<<endl;
+    std::cout<<"Mostrando empresas disponibles:"<<std::endl;
+    cout<<endl;
     while (y->abajo != nullptr) {
         y=y->abajo;
-        std::cout<<y->nombre<<std::endl;
-    }
+        std::cout<<y->nombre<<" || ";
+    }cout<<endl;
+    cout<<endl;
 }
 
 nodoAVL* Matriz::rotarDerecha(nodoAVL* y){
