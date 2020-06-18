@@ -566,8 +566,7 @@ void menuAdmin(Matriz *cubo){
 
             }
             dot+="}";
-            cout<<dot;
-            system("pause");
+
             FILE * file;
             file=fopen("avlDepto.dot","w+");
             fprintf(file,dot.c_str());
@@ -625,8 +624,7 @@ void menuAdmin(Matriz *cubo){
 
             }
             dot+="}";
-            cout<<dot;
-            system("pause");
+
             FILE * file;
             file=fopen("avlEmpresa.dot","w+");
             fprintf(file,dot.c_str());
