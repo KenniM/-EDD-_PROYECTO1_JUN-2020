@@ -494,7 +494,7 @@ void menuAdmin(Matriz *cubo){
 
         break;
 
-    //REPORTE DE USUARIOS EN CIERTA SUCURSA (Z)
+    //REPORTE DE USUARIOS EN CIERTA SUCURSAL (Z)
     case 3:
     {
         system("cls");
@@ -515,6 +515,9 @@ void menuAdmin(Matriz *cubo){
 
         if(empr && depto){
             cubo->graficarProfundidad(empr,depto);
+            menuAdmin(cubo);
+            break;
+
         }else{
             system("cls");
             system("color 0c");
@@ -586,7 +589,63 @@ void menuAdmin(Matriz *cubo){
     }
         break;
     //ACTIVOS DISPONIBLES EN UNA EMPRESA
-    case 5:
+    case 5:{
+        system("cls");
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        cout<<"--------------------------------------------- VER ACTIVOS DE UNA EMPRESA ----------------------------------------------"<<endl;
+        cout<<"-----------------------------------------------------------------------------------------------------------------------"<<endl;
+        string empresa="";
+        cout<<"Ingrese el nombre de la empresa de la que desea obtener informacion: ";
+        while(empresa==""){
+            getline(cin,empresa);
+        }
+        Nodo* empr=cubo->buscarEmpresa(empresa,cubo->cabecera);
+        if(empr){
+            int contador=0;
+            string dot="digraph AVLDepto{\n";
+            Nodo *auxEmp=empr;
+            Nodo *auxProfundidad=empr;
+            while (auxEmp) {
+                if(auxEmp->siguiente)
+                {auxEmp=auxEmp->siguiente;
+                auxProfundidad=auxEmp;
+                while (auxProfundidad) {
+                    dot+=cubo->crearNodosAVLs(auxProfundidad->arbolPersonal,auxProfundidad->nombre);
+                    dot+=cubo->armarAVLs(auxProfundidad->arbolPersonal,auxProfundidad->arbolPersonal);
+                    if(auxProfundidad->arbolPersonal)
+                    {
+                        dot+="Nodo0"+to_string(contador)+"[label=\""+auxProfundidad->nombre+"\" shape=record];\n";
+                        dot+="Nodo0"+to_string(contador)+"->"+auxProfundidad->arbolPersonal->auxGrafico+"\n";
+                        contador++;
+                    }
+                    auxProfundidad=auxProfundidad->atras;
+                }
+                }else{break;}
+
+
+            }
+            dot+="}";
+            cout<<dot;
+            system("pause");
+            FILE * file;
+            file=fopen("avlEmpresa.dot","w+");
+            fprintf(file,dot.c_str());
+            fclose(file);
+
+            system("dot.exe -Tpng -Gdpi=350 avlEmpresa.dot -o avlEmpresa.png");
+            system("start avlEmpresa.png");
+            menuAdmin(cubo);
+            break;
+        }else{
+            system("cls");
+            system("color 0c");
+            cout<<"Alguno de los valores ingresados no han sido encontrados. Intente de nuevo."<<endl;
+            system("pause");
+            menuAdmin(cubo);
+            break;
+        }
+
+    }
         break;
     //REPORTE DE TRANSACCIONES
     case 6:
